@@ -1,0 +1,107 @@
+# Creating a general control to the MDTextField
+# include Power_App_KVs/Screen_controller.kv
+
+<Login_screen>:
+    MDBoxLayout:
+        pos_hint: {'center_x': .5}
+        orientation: 'vertical'
+        spacing: 1
+        padding: 20
+
+        MDGridLayout:
+            cols: 1
+            pos_hint: {'center_x': .5}
+            Image:
+                id: company_logo
+                #adaptive_size: True
+                source: 'C:/Users/HENRY/Documents/Python Scripts/BEDC/Power_App/Power_App_KVs/random_logo.png'
+            MDLabel:
+                id: company_motto
+                #size_hint_x: None
+                #width: self.texture_size[0]
+                pos_hint: {"center_x": .5, "center_y": .5}
+                #pos_hint: {'center_x': .5}
+                text: "Company's Name and Logo"
+                halign: 'center'
+                font_size: '12sp'
+
+
+        MDTextField:
+            pos_hint: {'center_x': .5}
+            id: user_name_input
+            multiline: False
+            hint_text: 'User Name'
+
+        MDTextField:
+            pos_hint: {'center_x': .5}
+            id: password_input
+            hint_text: 'Password'
+            multiline: False
+            password: True
+
+        MDRoundFlatButton:
+            id: login_button
+            pos_hint: {'center_x': .5}
+            #size_hint: (.4,.2)
+            text: 'Login'
+            on_release: app.user_login(), app.change_screen('scr_con')
+        MDLabel:
+            id: empty_label1
+            text: '' #app.check_for_update()
+            size_hint: (None,.1)
+            width: '200sp'#self.size[1]
+            height: .1
+
+        MDGridLayout:
+            halign: 'right'
+            pos_hint: {'right':1, 'bottom': .1}
+            size_hint: (None, .1)
+            width: '200dp'
+            rows: 1
+            MDLabel:
+                id: work_offline_label
+                text: 'Online Mode'
+            MDSwitch:
+                widget_style: 'ios'
+                on_active:app.work_offline(*args)
+        MDGridLayout:
+            halign: 'right'
+            pos_hint: {'right':1, 'bottom': .1}
+            size_hint: (None, .1)
+            width: '200dp'
+            rows: 1
+            MDLabel:
+                id: dark_mode_label
+                text: 'Light Theme'
+            MDSwitch:
+                active: True
+                widget_style: 'ios'
+                on_active:app.lightening_chooser(*args)
+
+        MDLabel:
+            id: empty_label1
+            text: ''
+            size_hint: (None,.2)
+            width: '200sp'#self.size[1]
+            height: .4
+
+        MDGridLayout:
+            size_hint: (None,.1)
+            width: '300sp'
+            pos_hint: {'left':.1, 'top': 1}
+            rows: 1
+            MDLabel:
+                pos_hint: {"left": .1, "bottom": 1}
+                id: lat_nd_long
+                text: '6.787985, 4.577483'
+                font_size: '11sp'
+                size_hint_x: None
+                width: '150sp'
+            MDLabel:
+                pos_hint: {"left": .5, "bottom": 1}
+                id: app_version
+                text: 'Version 0.1'
+                font_size: '11sp'
+                size_hint_x: None
+                width: '100sp'
+

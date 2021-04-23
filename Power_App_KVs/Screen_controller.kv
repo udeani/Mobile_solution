@@ -1,0 +1,23 @@
+#: include Power_App_KVs/Supervisor_menu.kv
+#: include Power_App_KVs/RM_menu.kv
+#: include Power_App_KVs/Meter_mgt_menu.kv
+
+
+<Screen_controller>:
+    NavigationLayout:
+        ScreenManager:
+            id: controller_scr
+            size_hint: 1, 1
+            pos_hint: {'top':1, 'left':1}
+
+            RM_menu:
+                id: rm_screen
+                name: 'Route Martial Menu'
+
+            Supervisor_menu:
+                id: supervisor_screen
+                name: 'Supervisor Menu'
+
+            Meter_reading_screen:
+                id: meter_reading
+                name: "Meter Reading"

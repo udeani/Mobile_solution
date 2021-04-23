@@ -1,0 +1,26 @@
+
+MDToolbar:
+    title: "Navigation Drawer"
+    pos_hint: {'top':1, 'left':1}
+    size_hint: (1, .1)
+    elevation: 10
+    left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
+    Widget:
+    MDNavigationDrawer:
+        id: nav_drawer
+        ScrollView:
+            MDList:
+                OneLineAvatarIconListItem:
+                    text: 'home'
+                    on_release: nav_drawer.set_state("close")
+                    IconLeftWidget:
+                        icon: 'android'
+                        on_release: nav_drawer.set_state("close")
+
+                OneLineAvatarIconListItem:
+                    text: 'setting'
+                    on_release: nav_drawer.set_state("close")
+                    IconLeftWidget:
+                        icon: 'android'
+                        on_release: nav_drawer.set_state("close")
+

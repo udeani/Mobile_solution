@@ -1,0 +1,70 @@
+# import md_icons kivymd.icon_definitions
+
+<RM_menu>:
+    ScrollView:
+        size_hint_y: 0.92
+        MDList:
+            id: layouts
+            padding: int(app.menu_card_padding(self.parent.width, self.parent.height))
+            spacing: '6dp'
+            cols: int(app.MDGrid_or_List_cols_calc(self.parent.width, self.parent.height))
+
+            MDCard:
+                on_press: app.change_screen_1('Meter Reading')
+                MDIcon
+                    icon: 'android'
+                MDLabel:
+                    text: 'Meter Reading'
+            MDCard:
+                on_press: app.change_screen_1('Supervisor Menu')
+                MDIcon:
+                    icon: "hand-heart"
+                MDLabel:
+                    text: 'Bill Delivery'
+            MDCard:
+                on_press: app.change_screen_1('Supervisor Menu')
+                MDIcon:
+                    icon: 'account-plus'
+                MDLabel:
+                    text: 'New Setup Capture'
+            MDCard:
+                on_press: app.change_screen_1('Supervisor Menu')
+                MDIcon:
+                    icon: "hand-heart"
+                MDLabel:
+                    text: 'Bill Delivery'
+            MDCard:
+                on_press: app.change_screen_1('Supervisor Menu')
+                MDIcon:
+                    icon: "hand-heart"
+                MDLabel:
+                    text: 'Customer Information'
+            MDCard:
+                on_press: app.change_screen_1('Supervisor Menu')
+                MDIcon:
+                    icon: "human-handsup"
+                MDLabel:
+                    text: 'Report Abuse'
+            MDCard:
+                on_press: app.change_screen_1('Supervisor Menu')
+                MDIcon:
+                    icon: "account"
+                MDLabel:
+                    text: 'Customer Details/Update'
+            MDCard:
+                on_press: app.change_screen_1('Supervisor Menu')
+                MDIcon:
+                    icon: "hand-heart"
+                MDLabel:
+                    text: 'Collection History'
+
+
+
+                #radius: [25, 0, 0, 0]
+                #md_bg_color: app.theme_cls.primary_color
+            #METER READING
+            #BILL DELIVERY
+            #CAPTURE NEW SETUP
+            #CUSTOMER CONTACTS/INFO
+            #REPORT
+

@@ -1,0 +1,32 @@
+#: import AKCircularProgress Power_App_cls.progresswidget
+<Meter_reading_screen>:
+    MDBoxLayout:
+        size_hint_y: 0.92
+        orientation: "vertical"
+        MDGridLayout:
+            size_hint_y: .1
+            cols: 2
+            MDLabel:
+                text: "September Usuage"
+                font_size: "12dp"
+            MDLabel:
+                text: "20 Oct 2019"
+                font_size: "12dp"
+        MDGridLayout:
+            size_hint_y: .1
+            cols: 3
+            padding: 1
+            MDLabel:
+                #size_hint_x: .3
+                text: "BU"
+            MDLabel:
+                #size_hint_x: .3
+                text: "Transformer ID"
+            MDTextButton:
+                #size_hint_x: .3
+                text: "change DSS"
+                font_size: "12dp"
+        Screen:
+            ScrollView:
+                MDCard:
+                    size_hint: 1,.8
