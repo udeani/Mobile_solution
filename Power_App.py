@@ -9,6 +9,9 @@ from kivy.uix.button import Button
 from kivy.clock import Clock
 from kivymd.uix.label import MDLabel
 
+
+#Builder.load_file('Power_App_KVs/meter_reading_details.kv')
+
 class ScreenManager(ScreenManager):
     pass
 

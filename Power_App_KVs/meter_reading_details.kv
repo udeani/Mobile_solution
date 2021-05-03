@@ -1,0 +1,47 @@
+<Meters_to_read@MDBoxLayout>:
+    size_hint: 1,None#.3
+    height: '40dp'
+    orientation:"vertical"
+    MDCard:
+        orientation: "horizontal"
+        size_hint: 1,.2
+        MDIcon:
+            halign: "center"
+            valign: "center"
+            size_hint: .2,.1
+            icon: "language-python"
+            font_size: "40dp"
+        MDCard:
+            size_hint: .3,1
+            MDLabel:
+                text: "01234567890"
+                font_size: "8dp"
+            MDLabel:
+                text: "firstName LastName I."
+                font_size: "8dp"
+            MDLabel:
+                text: "acc ID/PIN"
+                font_size: "8dp"
+        MDCard:
+            size_hint: .3,1
+            MDLabel:
+                text: "f'Reading: {o_reading}"
+                font_size: "8dp"
+            MDLabel:
+                text: "f'Reading: {p_reading}"
+                font_size: "8dp"
+            MDLabel:
+                text: "00000"
+                font_size: "8dp"
+                #IconLeftWidget:
+                #    icon: "android"
+    MDCard:
+        size_hint: 1,.1
+        orientation: "horizontal"
+        MDTextFieldRect:
+            helper_text: "Enter Reading"
+        MDIconButton:
+            icon: "camera"
+        MDIconButton:
+            icon: "map-marker"
+

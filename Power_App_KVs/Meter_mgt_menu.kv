@@ -1,32 +1,48 @@
 #: import AKCircularProgress Power_App_cls.progresswidget
+#:include force Power_App_KVs/meter_reading_details.kv
+
 <Meter_reading_screen>:
     MDBoxLayout:
         size_hint_y: 0.92
         orientation: "vertical"
-        MDGridLayout:
-            size_hint_y: .1
-            cols: 2
+        MDCard:
+            size_hint: 1,.08
+            orientation: "horizontal"
             MDLabel:
                 text: "September Usuage"
                 font_size: "12dp"
+                halign: "left"
             MDLabel:
                 text: "20 Oct 2019"
                 font_size: "12dp"
-        MDGridLayout:
-            size_hint_y: .1
-            cols: 3
-            padding: 1
+                halign: "right"
+        MDCard:
+            size_hint: 1,.08
+            orientation: "horizontal"
             MDLabel:
-                size_hint_x: .3
+                size_hint: .3,1
                 text: "BU"
             MDLabel:
-                #size_hint_x: .3
+                size_hint: .3,1
                 text: "Transformer ID"
-            MDTextButton:
-                #size_hint_x: .3
+            MDRectangleFlatButton:
+                size_hint: .3,1
                 text: "change DSS"
-                font_size: "12dp"
+                font_size: "13dp"
+                theme_text_color: "Primary"
+                #text_color: 1,0,0,1
         Screen:
             ScrollView:
-                MDCard:
-                    size_hint: 1,.8
+                do_scroll_y: True
+                MDGridLayout:
+                    padding: None
+                    size_hint: 1,None
+                    #width: self.parent.width
+                    height: self.children.height
+                    #orientation: "vertical"
+                    cols: 1
+                    #rows: 1
+                    Meters_to_read:
+                    Meters_to_read:
+                    Meters_to_read:
+
