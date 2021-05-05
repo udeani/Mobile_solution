@@ -68,15 +68,32 @@ class Screen_controller(MDScreen):
     pass
 
 
+class Meter_read_per_acc(MDScreen):
+    pass
+
+
 class Power_App(MDApp):
     def build(self):
 
-        Window.size = (244, 529)  # delete later
+        Window.size = (255, 529)  # delete later
         self.theme_cls.theme_style = 'Light'
         self.theme_cls.primary_hue = '900'
         self.theme_cls.primary_palette = 'BlueGray'
         self.theme_cls.theme_text_color = 'Dark'
         #self.nav_bar = Builder.load_file('Power_App_KVs//Navigation_drawer.kv')
+
+    """    def __init__(self, **kw):
+        super().__init__(**kw)
+        Clock.schedule_once(self.set_toolbar_font_name)
+        Clock.schedule_once(self.set_toolbar_font_size)
+
+    def set_toolbar_font_name(self, *args):
+        self.root.ids.toolbar.font_name = "JetBrainsMono-ExtraBold-Italic.ttf"
+
+    def set_toolbar_font_size(self, *args):
+        self.root.ids.toolbar.font_size = '4sp'
+        
+        """
 
     def on_start(self):
         self.root.ids.toolbar.title = 'Mobile App'
@@ -105,7 +122,7 @@ class Power_App(MDApp):
             screen.current = screen_name
 
         #if screen_name == 'scr_con':
-        self.root.ids.toolbar.title = 'Power App'
+        self.root.ids.toolbar.title = 'Mobile App'
 
         #else:
             #self.root.ids.toolbar.title = 'Power App'
@@ -116,7 +133,9 @@ class Power_App(MDApp):
 
         self.Screen_identifier = {'scr_con': 'Menu',
                              'Route Martial Menu': 'Menu',
-                             'Supervisor Menu': 'Menu','Meter Reading': 'read a meter'}
+                             'Supervisor Menu': 'Menu',
+                                  'Meter Reading': 'Meter Reading',
+                                  "Meter reading page": "Meter Reading"}
 
         screen = self.root.ids.screen_manager.get_screen('scr_con').ids.controller_scr  # defining the 2nd screen manager to change
 
@@ -184,5 +203,11 @@ class Power_App(MDApp):
     def user_details(self):
         pass
 
+    def meter_screen_sizer(self, parent_height_y, child_number):
+        meter_grid_height = (parent_height_y * 0.3) * child_number
+        return meter_grid_height
+
+    def go_to_home(self):
+        pass
 
 Power_App().run()

@@ -1,0 +1,26 @@
+<Meter_read_per_acc>:
+    MDBoxLayout:
+        size_hint: 1,.92
+        orientation: "vertical"
+        MDCard:
+            size_hint: 1, .2
+            orientation: "horizontal"
+            MDLabel:
+                text: "01234567890"
+            MDLabel:
+                text: "Account Name: Okoro Ahmed"
+            MDLabel:
+                markup: True
+                text: "Last Payment: [color=ff0000]N2000[/color] | 12/09/2019"
+        MDLabel:
+            size_hint: 1,.8
+            canvas.before:
+                Color:
+                    rgba: 0,1,0,1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            pos_hint: {"top":1, "center_x": .5}
+            halign: "center"
+            valign: "center"
+            text: "Camera for image here"

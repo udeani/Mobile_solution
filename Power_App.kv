@@ -3,6 +3,8 @@
 # Metrics kivy.metrics
 #: include Power_App_KVs/Login_screen.kv
 #: include Power_App_KVs/Screen_controller.kv
+<MDIconButton>
+    font_size: "5dp"
 
 <MDTextField>
     md_bg_color: None
@@ -36,11 +38,10 @@
 
 <IconLeftWidget>
     pos_hint: {"top":1, "left":1}
-    user_font_size: '20dp' # for icons at navigation drawer
+    user_font_size: '22dp' # for icons at navigation drawer
 
 <OneLineListItem>
-    font_size: '5dp'
-    user_font_size: '8dp'
+    font_size: '14dp'  # for OnlineListItem font size control manual
 
 <MDRaisedButton>
     #md_bg_color: None
@@ -65,19 +66,17 @@ Screen:
             MDToolbar:
                 id: toolbar
                 title: "Menu"
-                title_size: "12dp" # Not working
+                font_size: "14dp"  # manual
                 pos_hint: {'top':1}
-                size_hint_y: .07
+                size_hint_y: .06
                 elevation: 8
                 left_action_items: [['menu', lambda x: nav_drawer.set_state("open")]]
+                #right_action_items: [['more-vert', lambda x: app.raised_button.open(self.parent)]]
+                icon: 'C:/Users/HENRY/Documents/Python Scripts/BEDC/Power_App/Power_App_KVs/random_logo.png'
+                right_action_items: [['reload', lambda x: app.go_to_home()]]
+                #right_action_items: [['dot-vertical', lambda x: app.go_to_home()]]
+                user_font_size: "20dp"
 
-                Image:
-                    #pos_hint: {'center_x': .2}
-                    #valign: 'center'
-                    #halign: 'left'
-                    id: company_logo
-                    adaptive_size: True
-                    source: 'C:/Users/HENRY/Documents/Python Scripts/BEDC/Power_App/Power_App_KVs/random_logo.png'
 
             MDNavigationDrawer:
                 id: nav_drawer

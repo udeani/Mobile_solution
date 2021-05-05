@@ -1,6 +1,15 @@
 #: include Power_App_KVs/Supervisor_menu.kv
 #: include Power_App_KVs/RM_menu.kv
 #: include Power_App_KVs/Meter_mgt_menu.kv
+#: include Power_App_KVs/meter_reading_interface.kv
+#: include Power_App_KVs/Grid_reading_menu.kv
+#: include Power_App_KVs/Enumeration_menu.kv
+#: include Power_App_KVs/Enforcement_menu.kv
+#: include Power_App_KVs/Dialy_atten_menu.kv
+#: include Power_App_KVs/DBR_menu.kv
+#: include Power_App_KVs/HR_mgt_menu.kv
+#: include Power_App_KVs/Mobile_report_menu.kv
+#: include Power_App_KVs/Trial_billing_menu.kv
 
 
 <Screen_controller>:
@@ -21,3 +30,39 @@
             Meter_reading_screen:
                 id: meter_reading
                 name: "Meter Reading"
+
+            Meter_read_per_acc:
+                id: reading_screen
+                name: "Meter reading page"
+
+            Enumeration_menu:
+                id: enumeration_menu
+                name: "Enumeration Page"
+
+            HR_mgt_menu:
+                id: hr_mgt_menu
+                name: "HR page"
+
+            Trial_billing_menu:
+                id: trial_billing
+                name: "Trial Billing Menu"
+
+            Grid_reading_menu:
+                id: grid_reading
+                name: "Grid Reading Page"
+
+            Dialy_atten_menu:
+                id: daily_atten
+                name: "Daily Attendance"
+
+            DBR_menu:
+                id: dbr_menu
+                name: "DBR Menu"
+
+            Mobile_report_menu
+                id: mobile_report
+                name: "Mobile Report"
+
+            Enforcement_menu:
+                id: enforcement_menu
+                name: "Enforcement Page"
