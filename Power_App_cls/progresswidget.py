@@ -4,7 +4,7 @@ from kivy.properties import StringProperty, ListProperty, BooleanProperty, Numer
 from kivy.animation import Animation
 from kivymd.theming import ThemableBehavior
 from kivy.clock import Clock
-
+from kivymd.uix.mdfloatlayout import MDFloatLayout
 Builder.load_string(
     """
 <AKCircularProgress>:
@@ -33,7 +33,7 @@ Builder.load_string(
 )
 
 
-class AKCircularProgress(ThemableBehavior, BoxLayout):
+class AKCircularProgress(ThemableBehavior, MDFloatLayout):
     circle_color = ListProperty()
     start_deg = NumericProperty(0)
     end_deg = NumericProperty(360)

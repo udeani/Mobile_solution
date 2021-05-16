@@ -3,14 +3,19 @@ from kivy.core.window import Window
 from kivy.metrics import Metrics
 from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition, AnimationTransition, CardTransition
 from kivymd.uix.screen import MDScreen
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDFlatButton
+from kivymd.toast import toast
+from kivy.properties import StringProperty, ListProperty, BooleanProperty, NumericProperty, OptionProperty
+from kivy.animation import Animation
+from kivymd.theming import ThemableBehavior
+from kivymd.uix.textfield import MDTextField
 from kivy.lang import Builder
 from kivy.uix.image import Image
 from kivy.uix.button import Button
 from kivy.clock import Clock
 from kivymd.uix.label import MDLabel
 
-
-#Builder.load_file('Power_App_KVs/meter_reading_details.kv')
 
 class ScreenManager(ScreenManager):
     pass
@@ -79,8 +84,8 @@ class Power_App(MDApp):
         self.theme_cls.theme_style = 'Light'
         self.theme_cls.primary_hue = '900'
         self.theme_cls.primary_palette = 'BlueGray'
-        self.theme_cls.theme_text_color = 'Dark'
-        #self.nav_bar = Builder.load_file('Power_App_KVs//Navigation_drawer.kv')
+        #self.theme_cls.theme_text_color = 'Dark'
+        self.dialog = None
 
     """    def __init__(self, **kw):
         super().__init__(**kw)
@@ -135,7 +140,8 @@ class Power_App(MDApp):
                              'Route Martial Menu': 'Menu',
                              'Supervisor Menu': 'Menu',
                                   'Meter Reading': 'Meter Reading',
-                                  "Meter reading page": "Meter Reading"}
+                                  "Meter reading page": "Meter Reading",
+                                  "HR page": "HR Menu"}
 
         screen = self.root.ids.screen_manager.get_screen('scr_con').ids.controller_scr  # defining the 2nd screen manager to change
 
@@ -151,10 +157,10 @@ class Power_App(MDApp):
 
     def work_offline(self, checkbox, value):
         if value:
-            self.root.ids.screen_manager.get_screen('login_screen').ids.work_offline_label.text = 'Offline Mode'
+            self.root.ids.screen_manager.get_screen('login_screen').ids.work_offline_label.text = 'Online Mode'
             # plus other sqlite functions
         else:
-            self.root.ids.screen_manager.get_screen('login_screen').ids.work_offline_label.text = 'Online Mode'
+            self.root.ids.screen_manager.get_screen('login_screen').ids.work_offline_label.text = 'Offline Mode'
             # plus other sqlite functions
 
     def lightening_chooser(self, checkbox, value, *args):
@@ -204,10 +210,28 @@ class Power_App(MDApp):
         pass
 
     def meter_screen_sizer(self, parent_height_y, child_number):
-        meter_grid_height = (parent_height_y * 0.3) * child_number
+        meter_grid_height = (parent_height_y * 0.2) * child_number
         return meter_grid_height
 
     def go_to_home(self):
         pass
+
+    def nothing(self):
+        pass
+
+    def manual_meter_reading_1(self):
+        if not self.dialog:
+            self.dialog = MDDialog(
+                title="Address:",
+                type="confirmation",
+                size_hint=(1, 1),
+                buttons=[MDFlatButton(text="CANCEL", text_color=self.theme_cls.primary_color),
+                MDFlatButton(text="OK", text_color=self.theme_cls.primary_color),],)
+        self.dialog.open()
+
+    def manual_meter_reading(self):
+        toast("Uploading", 1.2)
+    def manual_popup(self):
+        MDCard
 
 Power_App().run()

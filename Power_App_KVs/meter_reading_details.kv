@@ -1,71 +1,77 @@
 <Meters_to_read@MDBoxLayout>:
-    size_hint: 1,.3
+    size_hint: 1,.2
     orientation:"vertical"
     MDCard:
-        orientation: "horizontal"
+        padding: 2
+        orientation: "vertical"
         size_hint: 1,.2
-        spacing: 4
+        spacing: 2
         on_press: app.change_screen_1('Meter reading page')
-        MDLabel:
-            size_hint: .2,1
-            canvas.before:
-                Color:
-                    rgba: 0,1,0,1
-                Rectangle:
-                    size: self.size
-                    pos: self.pos
-            pos_hint: {"top":1, "center_x": .5}
-            halign: "center"
-            valign: "center"
-            text: "meter avatar here"
-            #icon: "language-python"
-            #font_size: "40dp"
-        MDBoxLayout:
-            orientation:"vertical"
-            halign: "left"
-            valign: "left"
-            size_hint: .3,1
+        MDGridLayout:
+            cols: 2
+            spacing: 4
+            size_hint: 1,.7
             MDLabel:
-                halign: "left"
-                text: "01234567890"
-                font_size: "10dp"
-            MDLabel:
-                halign: "left"
-                text: "firstName L. I."
-                font_size: "10dp"
-            MDLabel:
-                halign: "left"
-                text: "acc ID/PIN"
-                font_size: "10dp"
-        MDBoxLayout:
-            orientation:"vertical"
-            halign: "left"
-            valign: "left"
-            size_hint: .3,1
-            MDLabel:
-                halign: "left"
-                text: "current: 0000000"
-                font_size: "10dp"
-            MDLabel:
-                halign: "left"
-                text: "prev: 0000000"
-                font_size: "10dp"
-            MDLabel:
-                halign: "left"
-                text: "00000"
-                font_size: "10dp"
+                size_hint: .2,1
+                canvas.before:
+                    Color:
+                        rgba: 0,1,0,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                pos_hint: {"top":1, "center_x": .5}
+                halign: "center"
+                valign: "center"
+                text: "meter avatar here"
 
-    MDBoxLayout:
-        size_hint: 1,.08
-        orientation: "horizontal"
-        MDTextFieldRect:
-            helper_text: "Enter Reading"
-        MDIconButton:
-            size_hint: .3,.9
-            icon: "camera"
-            font_size: "5dp"
-        MDIconButton:
-            icon: "map-marker"
-            size_hint: .3,.9
+            MDGridLayout:
+                cols: 2
+                size_hint: 1,1
+                MDGridLayout:
+                    cols: 1
+                    size_hint: .8,1
+                    MDLabel:
+                        halign: "left"
+                        text: "01234567890"
+                        font_size: "10dp"
+                    MDLabel:
+                        halign: "left"
+                        text: "First Name L. I."
+                        font_size: "10dp"
+                    MDLabel:
+                        halign: "left"
+                        text: "prev: 0000000"
+                        font_size: "10dp"
+                    MDLabel:
+                        halign: "left"
+                        markup: True
+                        text: "Last Payment: [color=ff0000]N2000[/color] | 12/09/19"
+                        font_size: "10dp"
+                MDFloatLayout:
+                    size_hint_x: 0.2
+                    MDIconButton:
+                        pos_hint: {"right": 1, "top": 1}
+                        icon: "map-marker"
+                        size_hint: 1,1
+                        on_press: app.nothing()
+                        #size_hint: None,None
+                        #size: 10, 10
 
+        MDBoxLayout:
+            size_hint: 1,.3
+            orientation: "horizontal"
+            AnchorLayout:
+                MDTextFieldRect:
+                    disabled: True
+                    helper_text: "Enter Reading"
+                MDLabel:
+                    padding: ["12dp","12dp"]
+                    text: "EDIT"
+                    font_size: "8dp"
+                    halign: "right"
+
+            MDIconButton:
+                size_hint: .3,.9
+                icon: "upload"
+                font_size: "5dp"
 

@@ -1,26 +1,62 @@
 <Meter_read_per_acc>:
     MDBoxLayout:
-        size_hint: 1,.92
+        size_hint: 1,.94
         orientation: "vertical"
-        MDCard:
-            size_hint: 1, .2
-            orientation: "horizontal"
-            MDLabel:
-                text: "01234567890"
-            MDLabel:
-                text: "Account Name: Okoro Ahmed"
-            MDLabel:
-                markup: True
-                text: "Last Payment: [color=ff0000]N2000[/color] | 12/09/2019"
+
         MDLabel:
-            size_hint: 1,.8
+            size_hint: 1,.81
             canvas.before:
                 Color:
-                    rgba: 0,1,0,1
+                    rgba: 0,1,0,.1
                 Rectangle:
                     size: self.size
                     pos: self.pos
             pos_hint: {"top":1, "center_x": .5}
             halign: "center"
             valign: "center"
-            text: "Camera for image here"
+            text: "Camera for image here with flash and zoom functions"
+            #pos_hint: {'center_x': .5, 'center_y': .5}
+            #on_release: app.show_date_picker()
+
+        MDCard:
+            size_hint: 1, .16
+            orientation: "vertical"
+            MDGridLayout:
+                cols: 2
+                MDGridLayout:
+                    cols: 1
+                    size_hint_x: 0.7
+                    MDLabel:
+                        size_hint_y: 0.03
+                        text: "01234567890"
+                        font_size: "10dp"
+                        halign: "left"
+                    MDLabel:
+                        size_hint_y: 0.03
+                        text: "John Ahmed Taiwo"
+                        font_size: "10dp"
+                        halign: "left"
+                    MDLabel:
+                        size_hint_y: .001
+                        canvas:
+                            Color:
+                                rgba: app.theme_cls.primary_color
+                            Rectangle:
+                                pos: int(self.pos[0]+12), self.pos[1]
+                                size: int(self.size[0]-24), self.size[1]
+                    MDGridLayout:
+                        rows: 1
+                        size_hint_y: 0.05
+                        MDTextFieldRect:
+                            size_hint: 0.8, 0.05
+                            required: True
+                            text: "Enter Reading"
+                            font_size: "12dp"
+                            multiline: False
+                            background_color: 1,1,0,1
+
+                MDFloatLayout:
+                    size_hint_x: 0.3
+                    MDFloatingActionButton:
+                        pos_hint: {"right": 1, "top": 1}
+                        icon: "content-save"

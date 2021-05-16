@@ -1,0 +1,17 @@
+<HR_mgt_menu>:
+    MDBoxLayout:
+        size_hint_y: 0.94
+        orientation: "vertical"
+        MDLabel:
+            text:"HR ingredients ^_^"
+        MDLabel:
+            size_hint_y: .001
+            canvas:
+                Color:
+                    rgba: app.theme_cls.primary_color
+                Rectangle:
+                    pos: int(self.pos[0]+12), self.pos[1]
+                    size: int(self.size[0]-24), self.size[1]
+
+        MDLabel:
+            text: "Tired"
