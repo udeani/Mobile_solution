@@ -1,7 +1,43 @@
+
 <HR_mgt_menu>:
-    MDBoxLayout:
+    MDGridLayout:
+        id: main_layout
+        cols: 1
         size_hint_y: 0.94
-        orientation: "vertical"
+        #orientation: "vertical"
+        #MDBoxLayout:
+            #id: texts
+            #orientation: "vertical"
+            #pos_hint: {'center_x': .5, 'center_y': .24}
+            #size_hint: (1, None)
+        TextInput:
+            id: dss_search_textbox
+            padding: ["1dp","8dp"]
+            pos_hint: {'left': .5, 'top': .24}
+            size_hint: 1, None
+            height: dp(40)
+            text: "Enter DSS Name"
+            font_size: "12dp"
+            multiline: False
+            #on_text: print(test_screen.height)
+            #on_text: transformer_selector_1(self.text)
+            #on_touch_down: screner.height = dp(10)
+
+        MDFloatLayout:
+            id: screner
+            ScrollView:
+                id: scroller
+                size_hint: .5, None
+                height: dp(457)#main_layout.height
+                pos: dss_search_textbox.x, dss_search_textbox.y-self.height
+                MDGridLayout:
+                    cols: 1
+                    pos: self.parent.pos
+                    id: test_screen
+                    md_bg_color: 0,1,0,.3
+                    size_hint: 1, None
+                    height: len(self.children) * dp(50)
+
         MDLabel:
             text:"HR ingredients ^_^"
         MDLabel:
@@ -15,3 +51,16 @@
 
         MDLabel:
             text: "Tired"
+            MDTextField:
+                padding: ["1dp","8dp"]
+                pos_hint: {'left': .5, 'top': .24}
+                height: dp(30)
+                width: dp(200)
+                text: ""
+                font_size: "12dp"
+                multiline: False
+                on_touch_down: app.transformer_selector_1(self.text)
+                #on_touch_up: app.transformer_selector_1("clear_widgets")
+                on_text: app.transformer_selector_1(self.text)
+
+

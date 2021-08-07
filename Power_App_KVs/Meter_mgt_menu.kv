@@ -1,7 +1,9 @@
 #: import AKCircularProgress akivymd.uix.progresswidget
-#:include force Power_App_KVs/meter_reading_details.kv
+#include force Power_App_KVs/meter_reading_details.kv
 # import AKBadgeLayout akivymd.uix.akbadgelayout
 <Meter_reading_screen>:
+    on_leave: app.meter_reading_clear_items()
+    #on_enter: app.meter_reading_menu_items()
     MDBoxLayout:
         size_hint_y: 0.94
         orientation: "vertical"
@@ -19,6 +21,7 @@
                 text: "BU"
 
         MDCard:
+            id: dss_and_progress_bar
             padding_x: 0
             spacing: 5
             size_hint: 1,.1
@@ -28,63 +31,81 @@
 				size_hint: (1, None)
 				height: dp(30)
 				width: dp(200)
+
                 TextInput:
+                    id: meter_dss_selector
                     padding: ["1dp","8dp"]
                     pos_hint: {'left': .5, 'top': .24}
-                    text: "Transformer name"
+                    size_hint_x: 1
+                    text: ""
                     font_size: "12dp"
                     multiline: False
-                    on_text: reading_progress_percent.current_percent = len(self.text)
+                    on_text: app.transformer_selector_1(self.text), root.clear_label()
+                    on_text: meter_dss_selector.border = (1, 4, 4, 4)
+                    #on_touch_up: app.transformer_selector_1(self.text)
+
+                    #, reading_progress_percent.current_percent = len(self.text)#self.text)
                 MDLabel:
+                    id: faker1
                     padding: ["12dp","12dp"]
-                    text: "Change"
+                    pos_hint: meter_dss_selector.x, meter_dss_selector.y
+                    size_hint: None, None
+                    size: meter_dss_selector.width, meter_dss_selector.height
+                    text: "Enter DSS name"
+                    font_size: "9dp"
+                    on_touch_down: app.transformer_selector_1(meter_dss_selector.text)
+
+                MDLabel:
+                    id: faker2
+                    padding: ["12dp","12dp"]
+                    text: ""
                     font_size: "10dp"
                     halign: "right"
-
-            AKCircularProgress:
-                id: reading_progress_percent
-                pos_hint: {"center_x": .5, "center_y": .5}
-                size_hint: None, None
-                size: dp(40), dp(40)
-                percent_size: dp(7)
-                line_width: dp(2)
-                percent_type: "relative"
-                start_deg: 180
-                end_deg: 540
-                max_percent: 2000#len(grid_id.children*10)
+            MDBoxLayout:
+                id: progress_bar_main_layout
+                size_hint_x: 0.2
 
         Screen:
             ScrollView:
                 do_scroll_y: True
                 MDGridLayout:
-                    id: grid_id
+                    id: meter_read_grid
                     md_bg_color: [.7]+app.theme_cls.primary_light[1:3]+[.4]
                     padding: 3
                     spacing: 5
                     size_hint: 1,None
-                    height: app.meter_screen_sizer(self.parent.height, len(self.children))
+                    height: app.widget_sizer(id="meter_to_read_height", parent_height=self.parent.height, child_number=len(self.children))
                     cols: 1
                     #the upload function should work in a way that will change the color of the meters to read
                     #to white when read but should be at yellow before read, it should also change the color to green if the upload is successful
-                    #
-                    #
-                    Meters_to_read:
-                    Meters_to_read:
-                    Meters_to_read:
-                    Meters_to_read:
-                    Meters_to_read:
-                    Meters_to_read:
-                    Meters_to_read:
-                    Meters_to_read:
-                    Meters_to_read:
-                    Meters_to_read:
-            MDCard:
+                    #Meters_to_read:
+                    MDLabel:
+                        orientation: "horizontal"
+                        size_hint: 1, .3
+                        MDLabel:
+                            size_hint: .7, 1
+                            text: "Download all or use the search bar above to select multiple or separate DSS"
+                            font_size: "14dp"
+                        #MDCard:
+                            #size_hint: .3, 1
+                        MDFillRoundFlatButton:
+                            text: "Download"
+                            on_press: app.meter_reading_clear_items(), app.meter_reading_menu_items()
+
+
+            MDFloatLayout:
                 id: bottom_tab
                 md_bg_color: [.6]+app.theme_cls.primary_light[1:3]+[0]
                 size_hint: 1, .1
-                orientation: "horizontal"
                 spacing: 5
                 padding: 5
+                MDFloatLayout:
+                    id: dss_scrollview
+                    pos: meter_dss_selector.x, meter_dss_selector.y
+                    size_hint: None, None
+                    width: meter_dss_selector.width
+
+
                 MDBoxLayout:
                     orientation: "horizontal"
                     padding:[5,5] if root.width < root.height else [15,15]
@@ -103,7 +124,7 @@
                         font_size: "9dp"
                         text: "Manual Input"
                         icon: "animation"
-                        on_release: app.change_screen_1('Meter reading page')
+                        on_release: app.change_screen('Meter reading page',step=2)
                         size_hint: .3,1
                         size: 70, 30
                         background_color: app.theme_cls.primary_dark
@@ -113,7 +134,7 @@
                         font_size: "9dp"
                         text: "Show all read"
                         icon: "animation"
-                        on_release: app.manual_meter_reading(), print(app.theme_cls.primary_light)
+                        on_release: app.manual_meter_reading()#, print(app.theme_cls.primary_light)
                         #size_hint_x: .2
                         size_hint: .3,1
                         background_color: app.theme_cls.primary_dark

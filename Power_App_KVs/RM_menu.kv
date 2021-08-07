@@ -5,56 +5,56 @@
         id: rx
         size_hint_y: 0.94
         MDList:
-            id: layouts
-            padding: int(app.menu_card_padding(self.parent.width, self.parent.height))
+            id: rm_menu
+            padding: int(app.widget_sizer(id="main_menu_padding", parent_width=self.parent.width, parent_height=self.parent.height))
             spacing: '6dp'
-            cols: int(app.MDGrid_or_List_cols_calc(self.parent.width, self.parent.height))
+            cols: int(app.widget_sizer(id="main_menu", parent_width=self.parent.width, parent_height=self.parent.height))
 
             MDCard:
-                on_press: app.change_screen_1('Meter Reading')
+                on_press: app.change_screen('Meter Reading',step=2)
                 MDIcon
                     icon: 'android'
                 MDLabel:
                     text: 'Meter Reading'
             MDCard:
                 id: xx
-                on_press: app.change_screen_1('Supervisor Menu')
+                on_press: app.change_screen('Supervisor Menu',step=2)
                 MDIcon:
                     icon: "hand-heart"
                 MDLabel:
                     text: 'Bill Delivery'
             MDCard:
-                on_press: app.change_screen_1('Supervisor Menu'),print (len(rx.children))
+                on_press: app.change_screen('Supervisor Menu',step=2)
                 MDIcon:
                     icon: 'account-plus'
                 MDLabel:
                     text: 'New Setup Capture'
             MDCard:
-                on_press: app.change_screen_1('Supervisor Menu')
+                on_press: app.change_screen('Supervisor Menu',step=2)
                 MDIcon:
                     icon: "hand-heart"
                 MDLabel:
                     text: 'Bill Delivery'
             MDCard:
-                on_press: app.change_screen_1('Supervisor Menu')
+                on_press: app.change_screen('Supervisor Menu',step=2)
                 MDIcon:
                     icon: "hand-heart"
                 MDLabel:
                     text: 'Customer Information'
             MDCard:
-                on_press: app.change_screen_1('Supervisor Menu')
+                on_press: app.change_screen('Supervisor Menu',step=2)
                 MDIcon:
                     icon: "human-handsup"
                 MDLabel:
                     text: 'Report Abuse'
             MDCard:
-                on_press: app.change_screen_1('Supervisor Menu')
+                on_press: app.change_screen('Supervisor Menu',step=2)
                 MDIcon:
                     icon: "account"
                 MDLabel:
                     text: 'Customer Details/Update'
             MDCard:
-                on_press: app.change_screen_1('HR page')
+                on_press: app.change_screen('HR page',step=2)
                 MDIcon:
                     icon: "hand-heart"
                 MDLabel:

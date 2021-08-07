@@ -3,6 +3,7 @@
 # Metrics kivy.metrics
 #: include Power_App_KVs/Login_screen.kv
 #: include Power_App_KVs/Screen_controller.kv
+
 <MDIconButton>
     font_size: "5dp"
 
@@ -32,7 +33,7 @@
     padding: 8
     elevation: '8dp'
     size_hint: None,None
-    width: app.MDcard_width_calc(self.parent.width, self.parent.height)#'120dp' #int ((self.parent.width/2) - 12)
+    width: app.widget_sizer(id="general_mdcard", parent_width=self.parent.width, parent_height=self.parent.height)#'120dp' #int ((self.parent.width/2) - 12)
     height: '100dp'
     orientation: 'vertical'
 
@@ -60,9 +61,11 @@ Screen:
             id: login_screen
             name: 'login_screen'
 
-        Screen_controller:
-            id: scr_con
-            name: 'scr_con'
+        Menu_controller:
+            id: menu_selector
+            name: 'menu selector'
+
+
             MDToolbar:
                 id: toolbar
                 title: "Menu"
@@ -85,23 +88,42 @@ Screen:
                 size_hint: (.8,.7)
                 MDCard:
                     size_hint: (1,.3)
+                    orientation: "vertical"
+                    spacing: dp(2)
+                    padding: dp(2)
                     MDLabel:
-                        text: "20 Oct 2019"
-                        font_size: "12dp"
-                        halign: "right"
+                        id: empty_nav_item
+                        text: ""
+                        font_size: dp(10)
+                        halign: "left"
+                    MDLabel:
+                        id: nav_user_name
+                        text: ""
+                        font_size: dp(10)
+                        halign: "left"
+                    MDLabel:
+                        id: nav_user_bu
+                        text: ""
+                        font_size: dp(8)
+                        halign: "left"
+                    MDLabel:
+                        id: nav_date
+                        text: ""
+                        font_size: "8dp"
+                        halign: "left"
                 ScrollView:
                     MDList:
                         OneLineListItem:
                             text: 'Home'
-                            on_release: nav_drawer.set_state("close"),app.change_screen_1('Route Martial Menu')
+                            on_release: nav_drawer.set_state("close"),app.change_screen('Route Martial Menu',step=2)
                             IconLeftWidget:
                                 icon: 'home'
-                                on_release: nav_drawer.set_state("close"), app.change_screen_1('Route Martial Menu')
+                                on_release: nav_drawer.set_state("close"), app.change_screen('Route Martial Menu',step=2)
 
                         OneLineListItem:
                             halign: "left"
                             text: 'Reload Data'
-                            on_release: app.change_screen('login_screen',direction='right'),nav_drawer.set_state("close")
+                            on_release: app.change_screen('login_screen',direction='right',step=1),nav_drawer.set_state("close")
                             IconLeftWidget:
                                 icon: 'reload'
                                 #on_release: app.change_screen('login_screen',direction='right'),nav_drawer.set_state("close")
@@ -130,10 +152,10 @@ Screen:
                         OneLineListItem:
                             halign: "left"
                             text: 'Log Out'
-                            on_release: app.change_screen('login_screen',direction='right'),nav_drawer.set_state("close")
+                            on_release: app.change_screen('login_screen',direction='right',step=1),nav_drawer.set_state("close")
                             IconLeftWidget:
                                 icon: 'logout'
-                                on_release: app.change_screen('login_screen',direction='right'),nav_drawer.set_state("close")
+                                on_release: app.change_screen('login_screen',direction='right',step=1),nav_drawer.set_state("close")
 
 
 

@@ -4,6 +4,7 @@
     MDBoxLayout:
         pos_hint: {'center_x': .5}
         orientation: 'vertical'
+        #cols: 1
         spacing: 0
         padding: 20
 
@@ -20,39 +21,52 @@
                 text: "Company's Name and Logo"
                 halign: 'center'
                 font_size: '12sp'
-
-        MDTextField:
+        MDGridLayout:
+            cols: 1
             pos_hint: {'center_x': .5}
-            font_size: "14dp"
-            font_hinting: "8dp"
-            id: user_name_input
-            multiline: False
-            hint_text: 'User Name'
+            MDTextField:
+                pos_hint: {'center_x': .5}
+                font_size: "14dp"
+                font_hinting: "8dp"
+                id: user_name_input
+                multiline: False
+                hint_text: 'User Name'
 
-        MDTextField:
-            pos_hint: {'center_x': .5}
-            id: password_input
-            hint_text: 'Password'
-            multiline: False
-            password: True
+            MDTextField:
+                pos_hint: {'center_x': .5}
+                id: password_input
+                hint_text: 'Password'
+                multiline: False
+                password: True
 
         MDRoundFlatButton:
             id: login_button
             pos_hint: {'center_x': .5}
             text: 'Login'
-            on_release: app.user_login(), app.change_screen('scr_con')
-        MDLabel:
-            id: empty_label1
-            text: '' #app.check_for_update()
+            on_release: app.user_login(user_name=user_name_input.text, password=password_input.text)
+        MDBoxLayout:
+            id: anim_1
+            orientation: "horizontal"
             size_hint: (1,.1)
-            width: '200dp'
-            height: .4
+            MDLabel:
+                id: animation_text
+                spacing: 0
+                text: '' #app.check_for_update()
+                halign: "right"
+                size_hint: (1,.06)
+            MDLabel:
+                id: animation_label1
+                circle_start: 0
+                circle_stop: 0
+                spacing: 0
+                halign: "left"
+                text: '' #app.check_for_update()
+                size_hint: (1,.06)
 
         MDGridLayout:
             spacing: "10dp"
-            size_hint: (None,.3)
-            width: '140dp'
-            rows: 2
+            size_hint: (.5,.3)
+            rows: app.widget_sizer(id="login_misc", parent_width=self.parent.width, parent_height=self.parent.height)
             padding: 0
             spacing: 1
             pos_hint: {'right':1, 'bottom': .1}

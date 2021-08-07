@@ -1,12 +1,12 @@
-<Meters_to_read@MDBoxLayout>:
-    size_hint: 1,.2
+#<Meters_to_read>:
+MDBoxLayout:
     orientation:"vertical"
     MDCard:
         padding: 2
         orientation: "vertical"
         size_hint: 1,.2
         spacing: 2
-        on_press: app.change_screen_1('Meter reading page')
+        on_press: app.change_screen('Meter reading page',step=2)
         MDGridLayout:
             cols: 2
             spacing: 4
@@ -31,22 +31,22 @@
                     cols: 1
                     size_hint: .8,1
                     MDLabel:
+                        id: acc_number
                         halign: "left"
-                        text: "01234567890"
+                        text: ""
                         font_size: "10dp"
                     MDLabel:
+                        id: names
                         halign: "left"
-                        text: "First Name L. I."
+                        text: ""
                         font_size: "10dp"
+
                     MDLabel:
-                        halign: "left"
-                        text: "prev: 0000000"
-                        font_size: "10dp"
-                    MDLabel:
+                        id: payment_details
                         halign: "left"
                         markup: True
-                        text: "Last Payment: [color=ff0000]N2000[/color] | 12/09/19"
-                        font_size: "10dp"
+                        text: ""
+                        font_size: "8dp"
                 MDFloatLayout:
                     size_hint_x: 0.2
                     MDIconButton:

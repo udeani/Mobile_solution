@@ -1,27 +1,51 @@
-#: import AKCircularProgress akivymd.uix.progresswidget
-# import AKCircularProgress Power_App_cls.progresswidget
 
 <Supervisor_menu>:
-    MDBoxLayout:
-        size_hint: 1,.94
-        MDGridLayout:
-            size_hint: .5,.5
-            pos_hint: {"top":1, "left":1}
-            cols: 2
-            MDSlider:
-                min: 0
-                max: 100
-                value: 0
-                on_active: progress_percent.current_percent = self.value
+    NavigationLayout:
+        ScreenManager:
+            id: supervisor_menu
+            size_hint: 1, 1
+            pos_hint: {'top':1, 'left':1}
 
-                #spacing: dp(30)
-        AKCircularProgress:
-            id: progress_percent
-            pos_hint: {"center_x": .5, "center_y": .5}
-            size_hint: None, None
-            size: dp(30), dp(30)
-            percent_size: dp(7)
-            line_width: dp(1)
-            percent_type: "relative"
-            start_deg: 180
-            end_deg: 540
+            HR_mgt_menu:
+                id: hr_mgt_menu
+                name: "HR page"
+
+            RM_menu:
+                id: rm_screen
+                name: 'Route Martial Menu'
+
+            Meter_reading_screen:
+                id: meter_reading
+                name: "Meter Reading"
+
+            Meter_read_per_acc:
+                id: reading_screen
+                name: "Meter reading page"
+
+            Enumeration_menu:
+                id: enumeration_menu
+                name: "Enumeration Page"
+
+            Trial_billing_menu:
+                id: trial_billing
+                name: "Trial Billing Menu"
+
+            Grid_reading_menu:
+                id: grid_reading
+                name: "Grid Reading Page"
+
+            Dialy_atten_menu:
+                id: daily_atten
+                name: "Daily Attendance"
+
+            DBR_menu:
+                id: dbr_menu
+                name: "DBR Menu"
+
+            Mobile_report_menu
+                id: mobile_report
+                name: "Mobile Report"
+
+            Enforcement_menu:
+                id: enforcement_menu
+                name: "Enforcement Page"
