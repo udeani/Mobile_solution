@@ -1,77 +1,86 @@
 #<Meters_to_read>:
-MDBoxLayout:
-    orientation:"vertical"
-    MDCard:
-        padding: 2
+Screen:
+    id: None
+    x_coordinate: None
+    y_coordinate: None
+    read_status: False
+    MDBoxLayout:
+        id: main_layout
         orientation: "vertical"
-        size_hint: 1,.2
-        spacing: 2
-        on_press: app.change_screen('Meter reading page',step=2)
-        MDGridLayout:
-            cols: 2
-            spacing: 4
-            size_hint: 1,.7
-            MDLabel:
-                size_hint: .2,1
-                canvas.before:
-                    Color:
-                        rgba: 0,1,0,1
-                    Rectangle:
-                        size: self.size
-                        pos: self.pos
-                pos_hint: {"top":1, "center_x": .5}
-                halign: "center"
-                valign: "center"
-                text: "meter avatar here"
+
+        MDCard:
+            padding: 2
+            orientation: "vertical"
+            size_hint: 1,.2
+            spacing: 2
+            md_bg_color: app.theme_cls.primary_light if main_layout.parent.read_status is False else [0,.9,0,1]
+            on_press:app.red_meter(acc_number.text, names.text)
 
             MDGridLayout:
                 cols: 2
-                size_hint: 1,1
-                MDGridLayout:
-                    cols: 1
-                    size_hint: .8,1
-                    MDLabel:
-                        id: acc_number
-                        halign: "left"
-                        text: ""
-                        font_size: "10dp"
-                    MDLabel:
-                        id: names
-                        halign: "left"
-                        text: ""
-                        font_size: "10dp"
-
-                    MDLabel:
-                        id: payment_details
-                        halign: "left"
-                        markup: True
-                        text: ""
-                        font_size: "8dp"
-                MDFloatLayout:
-                    size_hint_x: 0.2
-                    MDIconButton:
-                        pos_hint: {"right": 1, "top": 1}
-                        icon: "map-marker"
-                        size_hint: 1,1
-                        on_press: app.nothing()
-                        #size_hint: None,None
-                        #size: 10, 10
-
-        MDBoxLayout:
-            size_hint: 1,.3
-            orientation: "horizontal"
-            AnchorLayout:
-                MDTextFieldRect:
-                    disabled: True
-                    helper_text: "Enter Reading"
+                spacing: 4
+                size_hint: 1,.7
                 MDLabel:
-                    padding: ["12dp","12dp"]
-                    text: "EDIT"
-                    font_size: "8dp"
-                    halign: "right"
+                    size_hint: .2,1
+                    canvas.before:
+                        Color:
+                            rgba: 0,1,0,1
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+                    pos_hint: {"top":1, "center_x": .5}
+                    halign: "center"
+                    valign: "center"
+                    text: "meter avatar here"
 
-            MDIconButton:
-                size_hint: .3,.9
-                icon: "upload"
-                font_size: "5dp"
+                MDGridLayout:
+                    cols: 2
+                    size_hint: 1,1
+                    MDGridLayout:
+                        cols: 1
+                        size_hint: .8,1
+                        MDLabel:
+                            id: acc_number
+                            halign: "left"
+                            text: ""
+                            font_size: "10dp"
+                        MDLabel:
+                            id: names
+                            halign: "left"
+                            text: ""
+                            font_size: "10dp"
+
+                        MDLabel:
+                            id: payment_details
+                            halign: "left"
+                            markup: True
+                            text: ""
+                            font_size: "8dp"
+                    MDFloatLayout:
+                        size_hint_x: 0.2
+                        MDIconButton:
+                            pos_hint: {"right": 1, "top": 1}
+                            icon: "map-marker"
+                            size_hint: 1,1
+                            on_press: app.nothing()
+                            #size_hint: None,None
+                            #size: 10, 10
+
+            MDBoxLayout:
+                size_hint: 1,.3
+                orientation: "horizontal"
+                AnchorLayout:
+                    MDTextFieldRect:
+                        disabled: True
+                        helper_text: "Enter Reading"
+                    MDLabel:
+                        padding: ["12dp","12dp"]
+                        text: "EDIT"
+                        font_size: "8dp"
+                        halign: "right"
+
+                MDIconButton:
+                    size_hint: .3,.9
+                    icon: "upload"
+                    font_size: "5dp"
 

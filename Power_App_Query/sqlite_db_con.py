@@ -3,6 +3,8 @@ import sqlite3
 class sqlite_command:
 
     def __init__(self):
+        sql_command = "CREATE TABLE IF NOT EXISTS `power_app_memory.db`"
+
 
 
 import mysql.connector

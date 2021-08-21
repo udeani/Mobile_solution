@@ -48,7 +48,8 @@ class DbConnect:
             customerFirstName,
             customerLastName,
             ST_X(customerGPSpoint),
-            ST_Y(customerGPSpoint)
+            ST_Y(customerGPSpoint),
+            customerDSS
             FROM `customers_general_info_db`.`total_customer_table`
             WHERE customerMarketer = '{}' AND customerAccType = {} """.format(self.user_id, 2)
 
@@ -70,30 +71,24 @@ class DbConnect:
 
     def meter_reading_dssList(self):
         sql = """
-        SELECT dss_name
+        SELECT dss_name, dss_id
         FROM `dss_general_info_db`.`dss_info`
         WHERE staff_id = '{}'""".format(self.user_id)
 
         self.cursor.execute(sql)
-        self.dss_list = []
+        self.dss_list = {}
+        # making a dict of the dss and their ID after fetching them
         for dss in self.cursor.fetchall():
-            for items in dss:
-                self.dss_list.append(items)
+            self.dss_list[dss[0]] = dss[1]
         return self.dss_list
 
-    def readable_dss_filter(self, dss_name):
+    def readable_dss_filter(self, dss_name, dss_id):
         pass
-        sql = """SELECT customerAccNo,
-            customerFirstName,
-            customerLastName,
-            ST_X(customerGPSpoint),
-            ST_Y(customerGPSpoint)
-            FROM `customers_general_info_db`.`total_customer_table`
-            WHERE customerMarketer = '{}' AND customerAccType = {} AND dss_id =  """.format(self.user_id, 2)
+        #sql = f"SELECT customerAccNo, customerFirstName, customerLastName, ST_X(customerGPSpoint), ST_Y(customerGPSpoint) dss_id FROM `customers_general_info_db`.`total_customer_table` WHERE customerMarketer = '{}' AND customerAccType = {} AND dss_id =  '{}'".format(self.user_id, 2, dss_id)
 
-        self.cursor.execute(sql)
-        self.meter_details = self.cursor.fetchall()
-        return self.meter_details
+        #self.cursor.execute(sql)
+        #self.meter_details = self.cursor.fetchall()
+        #return self.meter_details
 
     def maintain_connection(self):
         pass
