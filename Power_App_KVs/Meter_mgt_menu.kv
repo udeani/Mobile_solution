@@ -8,116 +8,115 @@
         size_hint_y: 0.94
         orientation: "vertical"
         MDCard:
-            size_hint: 1,.06
-            orientation: "horizontal"
-            spacing: "5dp"
-            padding: "10dp"
-            MDLabel:
-                text: "Sept Cycle"
-                font_size: "10dp"
-                halign: "left"
-            MDLabel:
-                size_hint: .3,1
-                text: "BU"
-                font_size: "10dp"
+            size_hint: 1, 0.16
+            orientation: "vertical"
+            padding: "5dp"
 
-        MDCard:
-            id: dss_and_progress_bar
-            padding_x: 0
-            spacing: 5
-            size_hint: 1,.1
-            orientation: "horizontal"
-            AnchorLayout:
-			    pos_hint: {'center_x': .5, 'center_y': .5}
-				size_hint: (1, 1)
-				#height: dp(30)
-				#width: dp(200)
+            # first segment that has the SU and BU name
+            MDGridLayout:
+                cols: 2
+                size_hint: 1, .06
+                MDLabel:
+                    text: "Sept Cycle"
+                    font_size: "10dp"
+                    halign: "left"
+                MDLabel:
+                    #size_hint: .3,1
+                    text: "BU"
+                    font_size: "10dp"
+                    halign: "right"
+                    canvas:
+                     #   Color:
+                      #      rgba: app.theme_cls.primary_color
+                       # Rectangle:
+                        #    pos: int(self.parent.pos[0]+12), self.parent.pos[1]
+                         #   size: int(self.parent.size[0]-24), self.parent.size[1]
 
-                TextInput:
-                    id: meter_dss_selector
-                    padding: ["1dp","8dp"]
-                    pos_hint: None, None
-                    x: self.parent.x
-                    y: self.parent.y
-                    size_hint_x: 1
-                    text: ""
-                    font_size: "12dp"
-                    multiline: False
-                    on_text: app.transformer_selector_1(self.text), root.clear_label()
-                    on_text: meter_dss_selector.border = (0, 4, 4, 4)
+            # second segment that have search bar and progress widget
+            MDGridLayout:
+                id: searchgrid
+                cols: 2
+                size_hint: 1, .1
+                AnchorLayout:
+                    pos_hint: searchgrid.pos
+				    size_hint_x: .8
+				    size_hint_y: .1
+                    TextInput:
+                        id: meter_dss_selector
+                        padding: ["1dp","8dp"]
+                        pos_hint: None, None
+                        x: self.parent.x
+                        y: self.parent.y
+                        size_hint_x: 1
+                        size_hint_y: .8
+                        text: ""
+                        font_size: "12dp"
+                        multiline: False
+                        on_text: app.transformer_selector_1(self.text), root.clear_label()
+                        on_text: meter_dss_selector.border = (0, 4, 4, 4)
+                        MDLabel:
+                            id: faker0
+                            padding: ["12dp","12dp"]
+                            pos_hint: meter_dss_selector.x, meter_dss_selector.y
+                            size_hint: None, None
+                            size: meter_dss_selector.width, meter_dss_selector.height
+                            text: ""
+                            font_size: "9dp"
+                            on_touch_down: app.transformer_selector_1(meter_dss_selector.text)
+
+                        #, reading_progress_percent.current_percent = len(self.text)#self.text)
                     MDLabel:
-                        id: faker0
+                        id: faker1
                         padding: ["12dp","12dp"]
                         pos_hint: meter_dss_selector.x, meter_dss_selector.y
                         size_hint: None, None
                         size: meter_dss_selector.width, meter_dss_selector.height
-                        text: ""
+                        text: "Enter DSS name"
                         font_size: "9dp"
-                        on_touch_down: app.transformer_selector_1(meter_dss_selector.text)
 
+                    MDGridLayout:
+                        id: grider1
+                        cols: 2
+                        size_hint: None, None
+                        width: meter_dss_selector.width/3
+                        height: meter_dss_selector.height
+                        pos_hint: None, 1
+                        anchor_x: "right"
+                        pos: meter_dss_selector.x-(meter_dss_selector.width/3)+(meter_dss_selector.width/3), meter_dss_selector.y
+                        #x:meter_dss_selector.x
+                        #y:meter_dss_selector.y
+                        #canvas.before:
+                         #   Rectangle:
+                          #      pos: grider1.pos
+                           # Color:
+                            #    rgba: 0,0,1,1
 
-                    #, reading_progress_percent.current_percent = len(self.text)#self.text)
-                MDLabel:
-                    id: faker1
-                    padding: ["12dp","12dp"]
-                    pos_hint: meter_dss_selector.x, meter_dss_selector.y
-                    size_hint: None, None
-                    size: meter_dss_selector.width, meter_dss_selector.height
-                    text: "Enter DSS name"
-                    font_size: "9dp"
+                        MDFlatButton:
+                            id: filter_button
+                            size_hint: .8, 1
+                            text: "Filter"
+                            md_bg_color: 1,0,0,1
+                            font_size: "8dp"
+                        MDCheckbox:
+                            id: checker
+                            size_hint: .2, 1
+                            on_active: app.nothing()
 
-
-                MDGridLayout:
-                    id: grider
-                    cols: 2
-                    size_hint: None, None
-                    width: meter_dss_selector.width/3
-                    height: meter_dss_selector.height
-                    pos_hint: None, None
-                    x: meter_dss_selector.x+(meter_dss_selector.width/3)+(meter_dss_selector.width/3)#(meter_dss_selector.x-filter_button.width)
-                    #x:meter_dss_selector.x
-                    #y:meter_dss_selector.y
-                    canvas.after:
-                        Rectangle:
-                            pos: grider.pos
-                        Color:
-                            rgba: 0,0,1,1
-
-                    MDFlatButton:
-                        id: filter_button
-                        size_hint: .9, 1
-                        #width: self.parent.width*0.9
-                        #padding: ["12dp","12dp"]
-                        text: "Filter"
-                        md_bg_color: 1,0,0,1
-                        font_size: "8dp"
-                    MDCheckbox:
-                        id: checker
-                        size_hint: .1, 1
-                        #width: self.parent.width*0.1
-                        #pos_hint: {"top": 1, "right": 1}
-                        on_active: app.nothing()
-                        canvas.after:
-                            Rectangle:
-                                pos: self.parent.pos
-                            Color:
-                                rgba: 1,1,0,1
-
-            MDBoxLayout:
-                id: progress_bar_main_layout
-                size_hint_x: 0.2
-                AKCircularProgress:
-                    id: meter_read_progress
-                    pos_hint: {"center_x": .5, "center_y": .5}
-                    size_hint: (None, None)
-                    size: ('40dp', '40dp')
-                    line_width: '2dp'
-                    percent_type: "relative"
-                    percent_size: '7dp'
-                    start_deg: 180
-                    end_deg: 540
-                    max_percent: 1
-                    #current_percent: 0
+                MDBoxLayout:
+                    id: progress_bar_main_layout
+                    size_hint_x: 0.2
+                    AKCircularProgress:
+                        id: meter_read_progress
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        size_hint: (None, None)
+                        size: ('40dp', '40dp')
+                        line_width: '2dp'
+                        percent_type: "relative"
+                        percent_size: '7dp'
+                        start_deg: 180
+                        end_deg: 540
+                        max_percent: 1
+                        #current_percent: 0
 
         Screen:
             ScrollView:
