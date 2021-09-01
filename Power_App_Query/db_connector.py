@@ -82,13 +82,19 @@ class DbConnect:
             self.dss_list[dss[0]] = dss[1]
         return self.dss_list
 
-    def readable_dss_filter(self, dss_name, dss_id):
-        pass
-        #sql = f"SELECT customerAccNo, customerFirstName, customerLastName, ST_X(customerGPSpoint), ST_Y(customerGPSpoint) dss_id FROM `customers_general_info_db`.`total_customer_table` WHERE customerMarketer = '{}' AND customerAccType = {} AND dss_id =  '{}'".format(self.user_id, 2, dss_id)
+    def readable_dss_filter(self, dss_ids):
+        sql = """SELECT customerAccNo,
+            customerFirstName,
+            customerLastName,
+            ST_X(customerGPSpoint),
+            ST_Y(customerGPSpoint),
+            customerDSS
+            FROM `customers_general_info_db`.`total_customer_table`
+            WHERE customerMarketer = '{}' AND customerAccType = {} AND customerDSS = '{}'""".format(self.user_id, 2, dss_ids)
 
-        #self.cursor.execute(sql)
-        #self.meter_details = self.cursor.fetchall()
-        #return self.meter_details
+        self.cursor.execute(sql)
+        self.meter_details = self.cursor.fetchall()
+        return self.meter_details
 
     def maintain_connection(self):
         pass

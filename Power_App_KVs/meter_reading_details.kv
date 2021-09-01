@@ -7,14 +7,17 @@ Screen:
     MDBoxLayout:
         id: main_layout
         orientation: "vertical"
+        md_bg_color: [1,0,0,1]#app.theme_cls.primary_light if main_layout.parent.read_status is False else [0,.9,0,1]
+
 
         MDCard:
+            #id:
             padding: 2
             orientation: "vertical"
             size_hint: 1,.2
             spacing: 2
-            md_bg_color: app.theme_cls.primary_light if main_layout.parent.read_status is False else [0,.9,0,1]
             on_press:app.red_meter(acc_number.text, names.text)
+            on_press: print(main_layout.parent.id)
 
             MDGridLayout:
                 cols: 2
