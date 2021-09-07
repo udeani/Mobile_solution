@@ -1,23 +1,22 @@
 #<Meters_to_read>:
 Screen:
-    id: None
+    #id: None
     x_coordinate: None
     y_coordinate: None
     read_status: False
+
     MDBoxLayout:
         id: main_layout
         orientation: "vertical"
-        md_bg_color: [1,0,0,1]#app.theme_cls.primary_light if main_layout.parent.read_status is False else [0,.9,0,1]
-
-
         MDCard:
-            #id:
+            id: main_template_background
             padding: 2
             orientation: "vertical"
             size_hint: 1,.2
             spacing: 2
             on_press:app.red_meter(acc_number.text, names.text)
-            on_press: print(main_layout.parent.id)
+            #on_press: print(main_layout.parent.id)
+            md_bg_color: app.theme_cls.primary_light if main_layout.parent.read_status is False else [0,.9,0,1]
 
             MDGridLayout:
                 cols: 2
@@ -59,15 +58,17 @@ Screen:
                             markup: True
                             text: ""
                             font_size: "8dp"
-                    MDFloatLayout:
+                    MDGridLayout:
+                        cols: 1
                         size_hint_x: 0.2
                         MDIconButton:
-                            pos_hint: {"right": 1, "top": 1}
                             icon: "map-marker"
                             size_hint: 1,1
                             on_press: app.nothing()
-                            #size_hint: None,None
-                            #size: 10, 10
+                        MDLabel:
+                            id: distance_label
+                            text: "2m"
+                            font_size: "8dp"
 
             MDBoxLayout:
                 size_hint: 1,.3
@@ -86,4 +87,5 @@ Screen:
                     size_hint: .3,.9
                     icon: "upload"
                     font_size: "5dp"
+                    halign: "right"
 

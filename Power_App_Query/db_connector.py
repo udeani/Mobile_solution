@@ -90,7 +90,7 @@ class DbConnect:
             ST_Y(customerGPSpoint),
             customerDSS
             FROM `customers_general_info_db`.`total_customer_table`
-            WHERE customerMarketer = '{}' AND customerAccType = {} AND customerDSS = '{}'""".format(self.user_id, 2, dss_ids)
+            WHERE customerDSS = '{}' AND customerAccType = {} AND customerMarketer = '{}'""".format(dss_ids, 2, self.user_id)
 
         self.cursor.execute(sql)
         self.meter_details = self.cursor.fetchall()

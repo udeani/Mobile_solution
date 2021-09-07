@@ -1,3 +1,4 @@
+import math
 from kivymd.app import MDApp
 from kivy.core.window import Window
 from kivy.metrics import Metrics
@@ -108,6 +109,9 @@ class Meter_read_per_acc(MDScreen):
 class Waiting_screen(MDScreen):
     pass
 
+class Loading_widget():
+    pass
+
 
 class Power_App(MDApp):
 
@@ -120,6 +124,7 @@ class Power_App(MDApp):
         self.dss_list = None
         self.dss_checkbox_filter = []
         self.dss_search_text_state = "Load All"
+        self.items = "user logged in details"
 
     def build(self):
         Window.size = (255, 529)  # delete later
@@ -195,10 +200,11 @@ class Power_App(MDApp):
                 self.change_screen(screen_name='menu selector', step=1, menu_screen='Supervisor Menu')
 
             # fetching the navigation label item...
-            items = self.user.navigation_content()
-            self.root.ids.nav_user_name.text = f'{items[1]} {items[2][0]}.'
-            self.root.ids.nav_user_bu.text = f'{items[0]} BU {items[3]}'
+            self.items = self.user.navigation_content()
+            self.root.ids.nav_user_name.text = f'{self.items[1]} {self.items[2][0]}.'
+            self.root.ids.nav_user_bu.text = f'{self.items[0]} BU {self.items[3]}'
             self.root.ids.nav_date.text = str(datetime.datetime.now())
+            self.root.ids["menu_selector"].ids["meter_reading"].ids['BU'].text = f'{self.items[0]}'
 
     def change_screen(self, screen_name, direction='left', step=None, menu_screen=None):
 
@@ -283,7 +289,7 @@ class Power_App(MDApp):
         try:
             self.meter_reading_clear_items()
         except:
-            pass
+            print("error clearing dic stores")
         meters_to_read = ""
         # for the meter to read progress widget control
         meter_progress_widget = self.root.ids.screen_manager.get_screen('menu selector').ids.controller_scr.get_screen(
@@ -330,11 +336,12 @@ class Power_App(MDApp):
                 print("readable meters intact, no re-download needed")
 
             if self.readable_acc_numbers:
-                meter_progress_widget.max_percent = len(self.readable_acc_numbers)
+                meter_progress_widget.max_percent = len(self.readable_acc_numbers.keys())
+                print(meter_progress_widget.max_percent)
             else:
                 meter_progress_widget.max_percent = 1
 
-            print (self.readable_acc_numbers.keys())
+            print(self.readable_acc_numbers.keys())
             for accounts in self.readable_acc_numbers.keys():
                 data_counter1 += 1
 
@@ -342,6 +349,7 @@ class Power_App(MDApp):
 
                 # def individual_meter_items():
                 meters_to_read.id = accounts
+                meters_to_read.name = str(accounts)
                 meters_to_read.x_coordinate = self.readable_acc_numbers[accounts]['coordinates'][0]
                 meters_to_read.y_coordinate = self.readable_acc_numbers[accounts]['coordinates'][1]
                 meters_to_read.read_status = self.readable_acc_numbers[accounts]['read_status']
@@ -354,16 +362,19 @@ class Power_App(MDApp):
                 # testing if any account have been read before
                 if self.readable_acc_numbers[int(accounts)]['read_status'] is True:
                     self.current_percent += 1
+                else:
+                    print(self.readable_acc_numbers[int(accounts)]['read_status'])
                 meter_progress_widget.current_percent = self.current_percent
+
 
                 widget = self.root.ids.screen_manager.get_screen('menu selector').ids.controller_scr.get_screen(
                     'Meter Reading').ids.meter_read_grid
-                # widget.height = self.widget_sizer(id="meter_to_read_height", parent_height=self.parent.height, child_number=len(self.children))
 
                 widget.add_widget(meters_to_read)
+                widget2 = self.root.ids["menu_selector"].ids["meter_reading"]
+                widget2.ids[f"{accounts}"] = meters_to_read
+                print(meters_to_read.id)
             print(f'data counter 1: {data_counter}. data counter 2: {data_counter1}')
-            # for accounts in self.readable_acc_numbers.keys():
-            # print(accounts, self.readable_acc_numbers[accounts]['coordinates'], self.readable_acc_numbers[int(accounts)]['read_status'])
 
         elif self.dss_search_text_state == "Filter":
 
@@ -411,7 +422,7 @@ class Power_App(MDApp):
                     file is complete or there have been changes.
                     '''
                 for account in self.readable_acc_numbers.keys():
-                    if self.readable_acc_numbers[account]["dss"] in self.dss_checkbox_filter:  ###****###
+                    if self.readable_acc_numbers[account]["dss"] in self.dss_checkbox_filter:
                         data_counter += 1
                         acc_number = account
                         x_coordinate = self.readable_acc_numbers[account]["coordinates"][0]
@@ -429,20 +440,16 @@ class Power_App(MDApp):
                                                              coordinates=[x_coordinate, y_coordinate],
                                                              dss=customerDSS,
                                                              read_status=False, reading="")
-                    # else:
-                    # pass
-            # if self.readable_acc_numbers:
-            # meter_progress_widget.max_percent = len(self.readable_acc_numbers)
-            # else:
-            # meter_progress_widget.max_percent = 1
+
+            if self.filter_readable_acc_numbers:
+                meter_progress_widget.max_percent = len(self.filter_readable_acc_numbers.keys())
+                print(meter_progress_widget.max_percent)
+            else:
+                meter_progress_widget.max_percent = 1
 
             # since the akcircularprogress bar has refused to auto update at entry, i decided to add it manually through
             # python
-            """circularProgress = AKCircularProgress(pos_hint={"center_x": .5, "center_y": .5}, size_hint=(None, None),
-                                                  size=('40dp', '40dp'),
-                                                  percent_size='7dp', line_width='2dp', percent_type="relative",
-                                                  start_deg=180,
-                                                  end_deg=540, max_percent=self.max_per_circular_progress)#, #current_percent=int(self.current_circular_progress))"""
+
             # print (f'second level {len(self.filter_readable_acc_numbers.keys())}')
             for accounts in self.filter_readable_acc_numbers.keys():
                 # print(self.filter_readable_acc_numbers[accounts]['dss'])
@@ -450,6 +457,7 @@ class Power_App(MDApp):
 
                 # def individual_meter_items():
                 meters_to_read.id = accounts
+                meters_to_read.name = str(accounts)
                 meters_to_read.x_coordinate = self.filter_readable_acc_numbers[accounts]['coordinates'][0]
                 meters_to_read.y_coordinate = self.filter_readable_acc_numbers[accounts]['coordinates'][1]
                 meters_to_read.read_status = self.filter_readable_acc_numbers[accounts]['read_status']
@@ -458,30 +466,25 @@ class Power_App(MDApp):
                 meters_to_read.ids.payment_details.text = "Last Paid: [color=ff0000]{}[/color] | {}".format(
                     str(self.filter_readable_acc_numbers[accounts]['payments'][0]),
                     str(self.filter_readable_acc_numbers[accounts]['payments'][1]))
-                data_counter1 += 1
+                #data_counter1 += 1
                 # testing if any account have been read before
                 if self.filter_readable_acc_numbers[int(accounts)]['read_status'] is True:
                     self.current_percent += 1
+                else:
+                    print(self.filter_readable_acc_numbers[int(accounts)]['read_status'])
                 meter_progress_widget.current_percent = self.current_percent
 
                 widget = self.root.ids.screen_manager.get_screen('menu selector').ids.controller_scr.get_screen(
                     'Meter Reading').ids.meter_read_grid
                 # widget.height = self.widget_sizer(id="meter_to_read_height", parent_height=self.parent.height, child_number=len(self.children))
                 widget.add_widget(meters_to_read)
-            """
-            """
+                widget2 = self.root.ids["menu_selector"].ids["meter_reading"]
+                widget2.ids[f"{accounts}"] = meters_to_read
+
             print(f'data counter 1: {data_counter}. data counter 2: {data_counter1}')
 
     def red_meter(self, red_acc_number, red_acc_name):
-        """
-        widget2 = self.root.ids.screen_manager.get_screen('menu selector').ids.controller_scr.get_screen(
-            'Meter Reading').ids.meter_read_progress
-        #self.current_percent = 0
-        #read_meter = Builder.load_file('Power_App_KVs/meter_reading_interface.kv')
-        self.readable_acc_numbers[int(red_acc_number)]['read_status'] = True
-        print(self.readable_acc_numbers[int(red_acc_number)]['read_status'])
-        self.current_percent += 1
-        widget2.current_percent = self.current_percent"""
+
         self.to_read_acc_no = red_acc_number
         self.to_read_acc_name = red_acc_name
 
@@ -496,31 +499,38 @@ class Power_App(MDApp):
         if reading == "":
             self.notification_toast("Enter reading to save", 1)
         else:
-            #try:
-            red = float(reading)
-            self.readable_acc_numbers[int(self.to_read_acc_no)]['reading'] = red
-            self.readable_acc_numbers[int(self.to_read_acc_no)]['read_status'] = True
-            self.notification_toast("Saved", 1)
-            self.change_screen('Meter Reading', step=2)
-
-            meter_progress_widget = self.root.ids.screen_manager.get_screen(
+            meter_progress = self.root.ids.screen_manager.get_screen(
                 'menu selector').ids.controller_scr.get_screen(
-                'Meter Reading').ids.reading
-            meter_progress_widget.md_bg_color = [1, 1, 0, 1]
-            """try:
-                red = float(reading)
+                'Meter Reading').ids.meter_read_progress
+            red = float(reading)
+            try:
+                self.readable_acc_numbers[int(self.to_read_acc_no)]['reading'] = red
+                self.readable_acc_numbers[int(self.to_read_acc_no)]['read_status'] = True
+                self.notification_toast("Saved", 1)
+                # print(self.root.ids["menu_selector"].ids["meter_reading"].ids['1064432229'])#.ids.keys())
+                self.change_screen('Meter Reading', step=2)
+
+                meter_progress_widget = \
+                    self.root.ids["menu_selector"].ids["meter_reading"].ids[f'{self.to_read_acc_no}'].ids[
+                        'main_template_background']
+
+                meter_progress_widget.md_bg_color = [0, .9, 0, 1]
+                self.current_percent += 1
+                meter_progress.current_percent = self.current_percent
+            except TypeError:
                 self.filter_readable_acc_numbers[int(self.to_read_acc_no)]['reading'] = red
                 self.filter_readable_acc_numbers[int(self.to_read_acc_no)]['read_status'] = True
                 self.notification_toast("Saved", 1)
                 self.change_screen('Meter Reading', step=2)
 
-                meter_progress_widget = self.root.ids.screen_manager.get_screen(
-                    'menu selector').ids.controller_scr.get_screen(
-                    'Meter Reading').ids.reading
-                meter_progress_widget.md_bg_color = [1,1,0,1]
-
+                meter_progress_widget = \
+                    self.root.ids["menu_selector"].ids["meter_reading"].ids[f'{self.to_read_acc_no}'].ids[
+                        'main_template_background']
+                meter_progress_widget.md_bg_color = [0, .9, 0, 1]
+                self.current_percent += 1
+                meter_progress.current_percent = self.current_percent
             except:
-                self.notification_toast("Special character detected, check reading", 1.1)"""
+                self.notification_toast("Special character detected, check reading", 1.1)
 
     def meter_reading_clear_items(self):
         widget = self.root.ids.screen_manager.get_screen('menu selector').ids.controller_scr.get_screen(
@@ -533,6 +543,65 @@ class Power_App(MDApp):
         widget2 = self.root.ids.screen_manager.get_screen('menu selector').ids.controller_scr.get_screen(
             'Meter Reading').ids.progress_bar_main_layout
         # widget2.clear_widgets()
+
+    def meter_proximity_calc(self, x_coordinate, y_coordinate, *args):
+
+        # making a list(Dic) to store all the index of the children widget
+        meter_proximity = DictStore("meter_and_distance")
+        sort_list = []
+        widget = self.root.ids["menu_selector"].ids["meter_reading"].ids['meter_read_grid']
+
+        try:
+            for items in widget.children:
+
+                Q1 = float(items.x_coordinate)
+                P1 = float(items.y_coordinate)
+                Q2 = float(x_coordinate)
+                P2 = float(y_coordinate)
+
+                Qc = Q2 - Q1
+                PhiC = P2 - P1
+                a = (math.sin(Qc / 2) ** 2) + math.cos(Q1) * math.cos(Q2) * (math.sin(PhiC / 2) ** 2)
+                c = 2 * (math.atan2(math.sqrt(a), math.sqrt(1 - a)))
+                d = 6371e3 * c
+
+                # appending the calculated distance to the dict
+                meter_proximity.put(items.id, distance=d)
+
+                self.root.ids["menu_selector"].ids["meter_reading"].ids[f'{items.id}'].ids['distance_label'].text = f'{d} m'
+
+            # sorting the distances into an ordered list
+            for keys in meter_proximity.keys():
+                sort_list.append(meter_proximity[keys]['distance'])
+            sorted_list = sorted(sort_list)
+
+            # getting the coordinates of widget children in meter reading grid
+            widget = self.root.ids["menu_selector"].ids["meter_reading"].ids['meter_read_grid']
+            y_widget_pos = []
+            x_widget_pos = []
+            for widgets in widget.children:
+                y_widget_pos.append(widgets.pos[1])
+                # sorting in ascending order and reversing the y coordinates
+                y_widget_pos = sorted(y_widget_pos)
+                y_widget_pos_rev = (y_widget_pos[::-1])
+
+                x_widget_pos.append(widgets.pos[0])
+
+            # finding the widget_id(from the dictionary) that has the closest distance from the sorted list
+            i = 0
+            for keys in widget.children:
+                for key, value in meter_proximity.find(distance=sorted_list[i]):
+                    print(key, value)
+                    self.root.ids["menu_selector"].ids["meter_reading"].ids[f'{key}'].pos = [x_widget_pos[i], y_widget_pos_rev[i]]
+                    i += 1
+            for items in widget.children:
+                print(items.id, self.root.ids["menu_selector"].ids["meter_reading"].ids[f'{items.id}'].ids['distance_label'].text, items.pos)
+            y_widget_pos = None
+            x_widget_pos = None
+            y_widget_pos_rev = None
+            meter_proximity.clear()
+        except:
+            pass
 
     def set_toolbar_font_size(self, *args):
         self.root.ids.toolbar.font_size = '15sp'
@@ -562,6 +631,11 @@ class Power_App(MDApp):
     def manual_popup(self):
         MDCard
 
+    def filter_button_label(self, **kwargs):
+        self.dss_search_text_state = "Load All"
+        self.root.ids.screen_manager.get_screen('menu selector').ids.controller_scr.get_screen(
+            "Meter Reading").ids.filter_button.text = self.dss_search_text_state
+
     def transformer_selector_1(self, dss_text=""):
 
         layout_counter = 0
@@ -584,13 +658,8 @@ class Power_App(MDApp):
                 else:
                     return (children / 3) * 24
 
-        """dss_list = ['thuerhr', 'sdrlkfdjjter', 'gfjkdkjg', 'thhk', 'ytjhmncn', 'for', 'RM', 'menu',
-                    'To', 'determine', 'the', 'MDcard', 'padding', 'compare', 'the', 'parent', 'width', 'and', 'height',
-                    'if', 'x', 'is', 'greater', 'then', 'the', 'padding', 'will', 'be', 'the', 'remainder,' 'of', 'the',
-                    'parent', 'width', 'divided', 'lhu', '2','if']"""
         if not self.dss_list:
             self.dss_list = self.user.meter_reading_dssList()
-            # print(dss_list)
 
         root_layout = self.root.ids.screen_manager.get_screen('menu selector').ids.controller_scr.get_screen(
             "Meter Reading").ids.dss_scrollview
@@ -600,6 +669,7 @@ class Power_App(MDApp):
                                   size_hint=[None, None], height=0, width=width_calc.width, md_bg_color=[1, 1, 1, .9])
 
         scroll_view = ScrollView(do_scroll_y=True, size_hint=[None, None], size=box_layout.size)
+        #scroll_view.bind(on_touch_up=self.filter_button_label)
 
         scatter_layout = Scatter(center=width_calc.center,
                                  x=width_calc.x, y=width_calc.y - scroll_view.height,
@@ -714,10 +784,9 @@ class Power_App(MDApp):
             try:
                 "changing/determining the size of the scroll_view of meter_mgt_menu page from the number of children"
                 meter_grid_height = (parent_height * 0.2) * child_number
-                print(" the try worked here")
                 return meter_grid_height
             except:
-                print(f"an error occurred at the widget sizer line 7 above")
+                print(f"an error occurred at the widget sizer line 6 above")
 
         if id == "main_menu":
             """for Rm menu:
