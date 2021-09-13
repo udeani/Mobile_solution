@@ -1,6 +1,12 @@
+import certifi
+import os
+
+os.environ['SSL_CERT_FILE'] = certifi.where()
+
 import math
+from haversine import haversine, Unit
 from kivymd.app import MDApp
-from kivy.core.window import Window
+# from kivy.core.window import Window
 from kivy.metrics import Metrics
 from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition, AnimationTransition, CardTransition
 from kivymd.uix.screen import MDScreen
@@ -109,6 +115,7 @@ class Meter_read_per_acc(MDScreen):
 class Waiting_screen(MDScreen):
     pass
 
+
 class Loading_widget():
     pass
 
@@ -127,7 +134,7 @@ class Power_App(MDApp):
         self.items = "user logged in details"
 
     def build(self):
-        Window.size = (255, 529)  # delete later
+        # Window.size = (255, 529)  # delete later
         self.theme_cls.theme_style = 'Light'
         self.theme_cls.primary_hue = '900'
         self.theme_cls.primary_palette = 'BlueGray'
@@ -366,7 +373,6 @@ class Power_App(MDApp):
                     print(self.readable_acc_numbers[int(accounts)]['read_status'])
                 meter_progress_widget.current_percent = self.current_percent
 
-
                 widget = self.root.ids.screen_manager.get_screen('menu selector').ids.controller_scr.get_screen(
                     'Meter Reading').ids.meter_read_grid
 
@@ -466,7 +472,7 @@ class Power_App(MDApp):
                 meters_to_read.ids.payment_details.text = "Last Paid: [color=ff0000]{}[/color] | {}".format(
                     str(self.filter_readable_acc_numbers[accounts]['payments'][0]),
                     str(self.filter_readable_acc_numbers[accounts]['payments'][1]))
-                #data_counter1 += 1
+                # data_counter1 += 1
                 # testing if any account have been read before
                 if self.filter_readable_acc_numbers[int(accounts)]['read_status'] is True:
                     self.current_percent += 1
@@ -482,6 +488,113 @@ class Power_App(MDApp):
                 widget2.ids[f"{accounts}"] = meters_to_read
 
             print(f'data counter 1: {data_counter}. data counter 2: {data_counter1}')
+
+    def meter_reading_filter(self, dss_id):
+        # resetting all object instance of this function before setting them up again
+        try:
+            self.meter_reading_clear_items()
+        except:
+            print("error clearing dic stores")
+        meters_to_read = ""
+        # for the meter to read progress widget control
+        meter_progress_widget = self.root.ids.screen_manager.get_screen('menu selector').ids.controller_scr.get_screen(
+            'Meter Reading').ids.meter_read_progress
+
+        self.current_percent = 0
+
+        if not self.readable_acc_numbers:
+
+            self.filter_readable_acc_numbers = DictStore('account_2nd')
+            ''' the idea behind this 'if' statement is: setting the self.readable_acc_numbers to None at the main function
+                (ie the build level) and checking if its value is None here, which if true, by the idea of inheritance we change it to dict store
+                and carry it over without reading it from server again. iteration is needed at the background to check if the
+                file is complete or there have been changes.
+                '''
+
+            self.filter_readable_meters = self.user.readable_dss_filter(dss_id)
+
+            for row in self.filter_readable_meters:
+                # def individual_meter_items():
+                acc_number = row[0]
+                first_name = row[1]
+                last_name = row[2]
+                x_coordinate = row[3]
+                y_coordinate = row[4]
+                customerDSS = row[5]
+                print(f'2nd string {customerDSS}')
+                last_paid = self.user.last_payment(acc_number)
+                last_amount = last_paid[0]
+                last_date = last_paid[1]
+                display_name = first_name + " " + last_name
+
+                # assigning the individual meter items to a general dictionary:
+                self.filter_readable_acc_numbers.put(acc_number, names=display_name,
+                                                     payments=[last_amount, last_date],
+                                                     coordinates=[x_coordinate, y_coordinate], dss=customerDSS,
+                                                     read_status=False, reading="")
+        else:
+            self.filter_readable_acc_numbers = DictStore('account_4rd')
+            ''' the idea behind this 'if' statement is: setting the self.readable_acc_numbers to None at the main function
+                (ie the build level) and checking if its value is None here, which if true, by the idea of inheritance we change it to dict store
+                and carry it over without reading it from server again. iteration is needed at the background to check if the
+                file is complete or there have been changes.
+                '''
+            for account in self.readable_acc_numbers.keys():
+                if self.readable_acc_numbers[account]["dss"] == dss_id:
+                    acc_number = account
+                    x_coordinate = self.readable_acc_numbers[account]["coordinates"][0]
+                    y_coordinate = self.readable_acc_numbers[account]["coordinates"][1]
+                    customerDSS = self.readable_acc_numbers[account]["dss"]
+                    print(f' 3rd string {self.readable_acc_numbers[account]["dss"]}')
+                    last_amount = self.readable_acc_numbers[account]["payments"][0]
+                    last_date = self.readable_acc_numbers[account]["payments"][1]
+
+                    display_name = self.readable_acc_numbers[account]["names"]
+
+                    # assigning the individual meter items to a general dictionary:
+                    self.filter_readable_acc_numbers.put(acc_number, names=display_name,
+                                                         payments=[last_amount, last_date],
+                                                         coordinates=[x_coordinate, y_coordinate],
+                                                         dss=customerDSS,
+                                                         read_status=False, reading="")
+
+            if self.filter_readable_acc_numbers:
+                meter_progress_widget.max_percent = len(self.filter_readable_acc_numbers.keys())
+                print(meter_progress_widget.max_percent)
+            else:
+                meter_progress_widget.max_percent = 1
+
+            # since the akcircularprogress bar has refused to auto update at entry, i decided to add it manually through
+            # python
+
+        for accounts in self.filter_readable_acc_numbers.keys():
+            meters_to_read = Builder.load_file('Power_App_KVs/meter_reading_details.kv')
+
+            # def individual_meter_items():
+            meters_to_read.id = accounts
+            meters_to_read.name = str(accounts)
+            meters_to_read.x_coordinate = self.filter_readable_acc_numbers[accounts]['coordinates'][0]
+            meters_to_read.y_coordinate = self.filter_readable_acc_numbers[accounts]['coordinates'][1]
+            meters_to_read.read_status = self.filter_readable_acc_numbers[accounts]['read_status']
+            meters_to_read.ids.acc_number.text = str(accounts)
+            meters_to_read.ids.names.text = str(self.filter_readable_acc_numbers[accounts]['names'])
+            meters_to_read.ids.payment_details.text = "Last Paid: [color=ff0000]{}[/color] | {}".format(
+                str(self.filter_readable_acc_numbers[accounts]['payments'][0]),
+                str(self.filter_readable_acc_numbers[accounts]['payments'][1]))
+
+            # testing if any account have been read before
+            if self.filter_readable_acc_numbers[int(accounts)]['read_status'] is True:
+                self.current_percent += 1
+            else:
+                print(self.filter_readable_acc_numbers[int(accounts)]['read_status'])
+            meter_progress_widget.current_percent = self.current_percent
+
+            widget = self.root.ids.screen_manager.get_screen('menu selector').ids.controller_scr.get_screen(
+                'Meter Reading').ids.meter_read_grid
+
+            widget.add_widget(meters_to_read)
+            widget2 = self.root.ids["menu_selector"].ids["meter_reading"]
+            widget2.ids[f"{accounts}"] = meters_to_read
 
     def red_meter(self, red_acc_number, red_acc_name):
 
@@ -502,8 +615,9 @@ class Power_App(MDApp):
             meter_progress = self.root.ids.screen_manager.get_screen(
                 'menu selector').ids.controller_scr.get_screen(
                 'Meter Reading').ids.meter_read_progress
-            red = float(reading)
+
             try:
+                red = float(reading)
                 self.readable_acc_numbers[int(self.to_read_acc_no)]['reading'] = red
                 self.readable_acc_numbers[int(self.to_read_acc_no)]['read_status'] = True
                 self.notification_toast("Saved", 1)
@@ -518,6 +632,7 @@ class Power_App(MDApp):
                 self.current_percent += 1
                 meter_progress.current_percent = self.current_percent
             except TypeError:
+                red = float(reading)
                 self.filter_readable_acc_numbers[int(self.to_read_acc_no)]['reading'] = red
                 self.filter_readable_acc_numbers[int(self.to_read_acc_no)]['read_status'] = True
                 self.notification_toast("Saved", 1)
@@ -553,22 +668,25 @@ class Power_App(MDApp):
 
         try:
             for items in widget.children:
-
                 Q1 = float(items.x_coordinate)
                 P1 = float(items.y_coordinate)
                 Q2 = float(x_coordinate)
                 P2 = float(y_coordinate)
+                my_loc = (Q2, P2)
+                acc_loc = (Q1, P1)
 
-                Qc = Q2 - Q1
-                PhiC = P2 - P1
-                a = (math.sin(Qc / 2) ** 2) + math.cos(Q1) * math.cos(Q2) * (math.sin(PhiC / 2) ** 2)
-                c = 2 * (math.atan2(math.sqrt(a), math.sqrt(1 - a)))
-                d = 6371e3 * c
+                d = haversine(my_loc, acc_loc, unit=Unit.METERS)
+                #Qc = Q2 - Q1
+                #PhiC = P2 - P1
+                #a = (math.sin(Qc / 2) ** 2) + math.cos(Q1) * math.cos(Q2) * (math.sin(PhiC / 2) ** 2)
+                #c = 2 * (math.atan2(math.sqrt(a), math.sqrt(1 - a)))
+                #d = 6371e3 * c
 
                 # appending the calculated distance to the dict
                 meter_proximity.put(items.id, distance=d)
 
-                self.root.ids["menu_selector"].ids["meter_reading"].ids[f'{items.id}'].ids['distance_label'].text = f'{d} m'
+                self.root.ids["menu_selector"].ids["meter_reading"].ids[f'{items.id}'].ids[
+                    'distance_label'].text = f'{d} m'
 
             # sorting the distances into an ordered list
             for keys in meter_proximity.keys():
@@ -592,10 +710,13 @@ class Power_App(MDApp):
             for keys in widget.children:
                 for key, value in meter_proximity.find(distance=sorted_list[i]):
                     print(key, value)
-                    self.root.ids["menu_selector"].ids["meter_reading"].ids[f'{key}'].pos = [x_widget_pos[i], y_widget_pos_rev[i]]
+                    self.root.ids["menu_selector"].ids["meter_reading"].ids[f'{key}'].pos = [x_widget_pos[i],
+                                                                                             y_widget_pos_rev[i]]
                     i += 1
             for items in widget.children:
-                print(items.id, self.root.ids["menu_selector"].ids["meter_reading"].ids[f'{items.id}'].ids['distance_label'].text, items.pos)
+                print(items.id,
+                      self.root.ids["menu_selector"].ids["meter_reading"].ids[f'{items.id}'].ids['distance_label'].text,
+                      items.pos)
             y_widget_pos = None
             x_widget_pos = None
             y_widget_pos_rev = None
@@ -669,7 +790,7 @@ class Power_App(MDApp):
                                   size_hint=[None, None], height=0, width=width_calc.width, md_bg_color=[1, 1, 1, .9])
 
         scroll_view = ScrollView(do_scroll_y=True, size_hint=[None, None], size=box_layout.size)
-        #scroll_view.bind(on_touch_up=self.filter_button_label)
+        # scroll_view.bind(on_touch_up=self.filter_button_label)
 
         scatter_layout = Scatter(center=width_calc.center,
                                  x=width_calc.x, y=width_calc.y - scroll_view.height,
@@ -679,7 +800,8 @@ class Power_App(MDApp):
         root_layout.clear_widgets()
 
         def printer(label, *args):
-            self.notification_toast(f'{label.text} selected', 0.4)
+            self.notification_toast(f'{label.dss_id} selected', 0.4)
+            self.meter_reading_filter(label.dss_id)
 
         def dss_checkbox_monitor(label, value, *args):
             self.notification_toast(f'{label.dss_id} selected', 0.4)
@@ -710,10 +832,10 @@ class Power_App(MDApp):
         # dss_label.bind(on_press=printer)
 
         class dss_label(Button):
-            def __init__(self, **kwargs):
+            def __init__(self, dss_id, **kwargs):
                 super(dss_label, self).__init__(**kwargs)
                 self.text = dss
-                # self.dss_id = dss_id
+                self.dss_id = dss_id
                 self.background_normal = ''
                 self.background_color = [1, 1, 1, 0]
                 self.color = [0, 0, 0, 1]
@@ -734,7 +856,7 @@ class Power_App(MDApp):
 
             if dss_text == "" or None:
                 dss_label.text = dss
-                box_layout.add_widget(dss_label())
+                box_layout.add_widget(dss_label(dss_id=self.dss_list[dss]))
                 box_layout.add_widget(dss_filter_check(dss_id=self.dss_list[dss]))
                 layout_counter += 1
 
@@ -744,7 +866,7 @@ class Power_App(MDApp):
             else:
                 if dss_text.lower() in dss.lower():
                     dss_label.text = dss
-                    box_layout.add_widget(dss_label())
+                    box_layout.add_widget(dss_label(dss_id=self.dss_list[dss]))
                     box_layout.add_widget(dss_filter_check(dss_id=self.dss_list[dss]))
                     layout_counter += 1
 
