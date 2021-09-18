@@ -8,7 +8,8 @@ from haversine import haversine, Unit
 from kivymd.app import MDApp
 # from kivy.core.window import Window
 from kivy.metrics import Metrics
-from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition, AnimationTransition, CardTransition
+from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition, AnimationTransition, CardTransition, \
+    NoTransition
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDFlatButton
@@ -32,6 +33,7 @@ from kivymd.uix.list import OneLineListItem
 from kivy.clock import Clock
 from kivymd.uix.label import MDLabel
 from Power_App.Power_App_Query.db_connector import DbConnect
+from Power_App.Power_App_Query.sqlite_db_con import SqliteConnect
 from kivy.graphics.vertex_instructions import Line, Ellipse, Rectangle
 from akivymd.uix.progresswidget import AKCircularProgress
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -120,6 +122,10 @@ class Loading_widget():
     pass
 
 
+class Customer_details(MDScreen):
+    pass
+
+
 class Power_App(MDApp):
 
     def __init__(self, **kwargs):
@@ -187,31 +193,35 @@ class Power_App(MDApp):
         joan = Animation(size=(16, 16), duration=3)
         joan.start(fake_button)
         # creating connection and logging in..
-        self.user = DbConnect(user_name, password)
+        try:
+            #self.user = DbConnect(user_name, password)
+            self.user = SqliteConnect(user_name, password)
+            # fetching the rank of the user to select the usefull menu
+            for item in self.user.menu_rank_checker():
 
-        # fetching the rank of the user to select the usefull menu
-        for item in self.user.menu_rank_checker():
+                # cancelling the login animation once the data has been fetched
+                # Clock.unschedule(self.login_animation)
+                if item == "Route Marshal":
+                    self.change_screen(screen_name='menu selector', step=1, menu_screen='Route Martial Menu')
 
-            # cancelling the login animation once the data has been fetched
-            # Clock.unschedule(self.login_animation)
-            if item == "Route Marshal":
-                self.change_screen(screen_name='menu selector', step=1, menu_screen='Route Martial Menu')
+                elif item == "Service Manager":
+                    self.change_screen(screen_name='menu selector', step=1, menu_screen='Supervisor Menu')
 
-            if item == "Service Manager":
-                self.change_screen(screen_name='menu selector', step=1, menu_screen='Supervisor Menu')
+                elif item == "Human Resources":
+                    self.change_screen(screen_name='menu selector', step=1, menu_screen='Supervisor Menu')
 
-            if item == "Human Resources":
-                self.change_screen(screen_name='menu selector', step=1, menu_screen='Supervisor Menu')
+                elif item == "Data Analyst":
+                    self.change_screen(screen_name='menu selector', step=1, menu_screen='Supervisor Menu')
 
-            if item == "Data Analyst":
-                self.change_screen(screen_name='menu selector', step=1, menu_screen='Supervisor Menu')
+                # fetching the navigation label item...
+                self.items = self.user.navigation_content()
+                self.root.ids.nav_user_name.text = f'{self.items[1]} {self.items[2][0]}.'
+                self.root.ids.nav_user_bu.text = f'{self.items[0]} BU {self.items[3]}'
+                self.root.ids.nav_date.text = str(datetime.datetime.now())
+                self.root.ids["menu_selector"].ids["meter_reading"].ids['BU'].text = f'{self.items[0]}'
 
-            # fetching the navigation label item...
-            self.items = self.user.navigation_content()
-            self.root.ids.nav_user_name.text = f'{self.items[1]} {self.items[2][0]}.'
-            self.root.ids.nav_user_bu.text = f'{self.items[0]} BU {self.items[3]}'
-            self.root.ids.nav_date.text = str(datetime.datetime.now())
-            self.root.ids["menu_selector"].ids["meter_reading"].ids['BU'].text = f'{self.items[0]}'
+        except:
+            toast("Error in connection or Login details", 1.1)
 
     def change_screen(self, screen_name, direction='left', step=None, menu_screen=None):
 
@@ -676,11 +686,11 @@ class Power_App(MDApp):
                 acc_loc = (Q1, P1)
 
                 d = haversine(my_loc, acc_loc, unit=Unit.METERS)
-                #Qc = Q2 - Q1
-                #PhiC = P2 - P1
-                #a = (math.sin(Qc / 2) ** 2) + math.cos(Q1) * math.cos(Q2) * (math.sin(PhiC / 2) ** 2)
-                #c = 2 * (math.atan2(math.sqrt(a), math.sqrt(1 - a)))
-                #d = 6371e3 * c
+                # Qc = Q2 - Q1
+                # PhiC = P2 - P1
+                # a = (math.sin(Qc / 2) ** 2) + math.cos(Q1) * math.cos(Q2) * (math.sin(PhiC / 2) ** 2)
+                # c = 2 * (math.atan2(math.sqrt(a), math.sqrt(1 - a)))
+                # d = 6371e3 * c
 
                 # appending the calculated distance to the dict
                 meter_proximity.put(items.id, distance=d)
