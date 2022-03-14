@@ -1,12 +1,11 @@
 # Creating a general control to the MDTextField
-
 <Login_screen>:
+    on_pre_enter: root._on_enter()
     MDBoxLayout:
         pos_hint: {'center_x': .5}
         orientation: 'vertical'
-        #cols: 1
-        spacing: 0
-        padding: 20
+        spacing: "5sp"
+        padding: "30sp"
 
         MDGridLayout:
             cols: 1
@@ -24,10 +23,13 @@
         MDGridLayout:
             cols: 1
             pos_hint: {'center_x': .5}
+            halign: "center"
+            valign: "center"
+
             MDTextField:
                 pos_hint: {'center_x': .5}
-                font_size: "14dp"
-                font_hinting: "8dp"
+                #font_size: "14sp"
+                font_hinting: "8sp"
                 id: user_name_input
                 multiline: False
                 hint_text: 'User Name'
@@ -39,11 +41,17 @@
                 multiline: False
                 password: True
 
-        MDRoundFlatButton:
-            id: login_button
-            pos_hint: {'center_x': .5}
-            text: 'Login'
-            on_release: app.user_login(user_name=user_name_input.text, password=password_input.text)
+            MDFloatLayout:
+                id: login_float_layout
+
+                MDRoundFlatButton:
+                    id: login_button
+                    pos_hint: {'center_x': .5,'center_y': .3}
+                    y: self.parent.y+self.height+self.height
+                    text: 'Login'
+                    on_press: root.login_anim(self.size, self.pos)
+                    #on_release: app.user_login(user_name=user_name_input.text, password=password_input.text)
+                    #font_size: "10dp"
         MDBoxLayout:
             id: anim_1
             orientation: "horizontal"
@@ -112,4 +120,4 @@
                 halign: "right"
                 id: app_version
                 text: 'Version 0.1'
-                font_size: '11sp'
+                font_size: lat_nd_long.font_size

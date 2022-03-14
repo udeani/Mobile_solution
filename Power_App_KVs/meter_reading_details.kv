@@ -4,6 +4,7 @@ Screen:
     x_coordinate: None
     y_coordinate: None
     read_status: False
+    dss_name: None
 
     MDBoxLayout:
         id: main_layout
@@ -14,8 +15,8 @@ Screen:
             orientation: "vertical"
             size_hint: 1,.2
             spacing: 2
-            on_press:app.red_meter(acc_number.text, names.text)
-            #on_press: print(main_layout.parent.id)
+            on_press: app.red_meter(acc_number.text, names.text), print(self.parent.parent.x_coordinate)
+            on_release: self.parent.parent.parent.parent.parent.parent.parent.parent.current = "Meter reading page"
             md_bg_color: app.theme_cls.primary_light if main_layout.parent.read_status is False else [0,.9,0,1]
 
             MDGridLayout:
@@ -45,19 +46,19 @@ Screen:
                             id: acc_number
                             halign: "left"
                             text: ""
-                            font_size: "10dp"
+                            #font_size: "10dp"
                         MDLabel:
                             id: names
                             halign: "left"
                             text: ""
-                            font_size: "10dp"
+                            #font_size: "10dp"
 
                         MDLabel:
                             id: payment_details
                             halign: "left"
                             markup: True
                             text: ""
-                            font_size: "8dp"
+                            #font_size: "8dp"
                     MDGridLayout:
                         cols: 1
                         size_hint_x: 0.2
@@ -74,13 +75,17 @@ Screen:
                 size_hint: 1,.3
                 orientation: "horizontal"
                 AnchorLayout:
-                    MDTextFieldRect:
+                    TextInput:
+                        id: reading_editor
                         disabled: True
-                        helper_text: "Enter Reading"
+                        text: ""
+                        font_size: "9dp"
+                        multiline: False
                     MDLabel:
+                        id: fake_label
                         padding: ["12dp","12dp"]
                         text: "EDIT"
-                        font_size: "8dp"
+                        #font_size: "8dp"
                         halign: "right"
 
                 MDIconButton:

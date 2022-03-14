@@ -1,24 +1,66 @@
 
 <Meter_read_per_acc>:
     on_leave: reading_textbox.text = ""
+    on_leave: root._on_leave()
+    on_enter: root.choose_widgets()
 
     MDBoxLayout:
         size_hint: 1,.94
         orientation: "vertical"
 
-        MDLabel:
+        MDCard:
+            id: camera_label
             size_hint: 1,.81
-            canvas.before:
-                Color:
-                    rgba: 0,1,0,.1
-                Rectangle:
-                    size: self.size
-                    pos: self.pos
-            pos_hint: {"top":1, "center_x": .5}
-            halign: "center"
-            valign: "center"
-            text: "Camera for image here with flash and zoom functions"
+            orientation: "vertical"
+            MDBoxLayout:
+                id: option_A
+                size_hint: 1, 0.8
+                orientation: "vertical"
+                MDGridLayout:
+                    id:camera_caller
+                    cols: 2
+                    MDLabel:
+                        text: "Take Picture"
+                        size_hint_x: .6
+                    MDIconButton:
+                        icon: "camera"
+                        halign: "center"
+                        valign: "center"
+                        pos_hint: {"top":1, "center_x": .5}
+                        on_press: root.take_picture()
+                MDGridLayout:
+                    id: file_chooser_caller
+                    cols: 2
+                    MDLabel:
+                        text: "Choose from file"
+                        size_hint_x: .6
+                    MDIconButton:
+                        icon: "file-find"
+                        halign: "center"
+                        valign: "center"
+                        pos_hint: {"top":1, "center_x": .5}
+                        on_press: root.file_chooser()
+            MDCard:
+                id: option_B
+                orientation: "horizontal"
+                size_hint: 1, .1
+                MDBoxLayout:
+                    #cols: 3
+                    orientation: "horizontal"
+                    Button:
+                        text: "Delete"
+                        font_size: "10dp"
+                        on_press: root.delete()
 
+                    Button:
+                        text: "Snap"
+                        font_size: "10sp"
+                        on_press: root.take_picture()
+
+                    Button:
+                        text: "Choose from file"
+                        font_size: "10sp"
+                        on_press: root.file_chooser()
 
         MDCard:
             size_hint: 1, .16
@@ -82,4 +124,4 @@
                     MDFloatingActionButton:
                         pos_hint: {"right": 1, "top": 1}
                         icon: "content-save"
-                        on_press: app.save_reading(reading_textbox.text)
+                        on_press: root.save_reading(reading_textbox.text)

@@ -1,72 +1,76 @@
 # import md_icons kivymd.icon_definitions
-
+#: import toast kivymd.toast
 <RM_menu>:
     ScrollView:
-        id: rx
-        size_hint_y: 0.94
+        id: top_widget
+        size_hint_y: 0.96
         MDList:
             id: rm_menu
-            padding: int(app.widget_sizer(id="main_menu_padding", parent_width=self.parent.width, parent_height=self.parent.height))
+            #padding: int(app.widget_sizer(id="main_menu_padding", parent_width=self.parent.width, parent_height=self.parent.height))
             spacing: '6dp'
-            cols: int(app.widget_sizer(id="main_menu", parent_width=self.parent.width, parent_height=self.parent.height))
+            cols: 2 if app.orientation_checker(top_widget.width, top_widget.height) else 5 #int(app.widget_sizer(id="main_menu", parent_width=self.parent.width, parent_height=self.parent.height))
 
             MDCard:
                 on_press: app.change_screen('Meter Reading',step=2)
+                width: app.widget_sizer(id="general_mdcard", parent_width=top_widget.width, parent_height=top_widget.height)
                 MDIcon
                     icon: 'android'
                 MDLabel:
                     text: 'Meter Reading'
             MDCard:
                 id: xx
-                on_press: app.change_screen('Supervisor Menu',step=2)
+                on_press: app.toast("This Card is 'Empty'..", 0.6)
+                width: app.widget_sizer(id="general_mdcard", parent_width=top_widget.width, parent_height=top_widget.height)
+
                 MDIcon:
                     icon: "hand-heart"
                 MDLabel:
-                    text: 'Bill Delivery'
+                    text: 'Empty Item Func.'
             MDCard:
                 on_press: app.change_screen('Supervisor Menu',step=2)
+                width: app.widget_sizer(id="general_mdcard", parent_width=top_widget.width, parent_height=top_widget.height)
+
                 MDIcon:
                     icon: 'account-plus'
                 MDLabel:
                     text: 'New Setup Capture'
             MDCard:
-                on_press: app.change_screen('Supervisor Menu',step=2)
+                on_press: app.change_screen('BillDelivery',step=2)
+                width: app.widget_sizer(id="general_mdcard", parent_width=top_widget.width, parent_height=top_widget.height)
+
                 MDIcon:
                     icon: "hand-heart"
                 MDLabel:
                     text: 'Bill Delivery'
             MDCard:
-                on_press: app.change_screen('Supervisor Menu',step=2)
+                on_press: app.change_screen('Customer Information',step=2)
+                width: app.widget_sizer(id="general_mdcard", parent_width=top_widget.width, parent_height=top_widget.height)
+
                 MDIcon:
                     icon: "hand-heart"
                 MDLabel:
                     text: 'Customer Information'
             MDCard:
-                on_press: app.change_screen('Supervisor Menu',step=2)
+                on_press: app.toast("Report Page coming soon", 0.6)
+                width: app.widget_sizer(id="general_mdcard", parent_width=top_widget.width, parent_height=top_widget.height)
+
                 MDIcon:
                     icon: "human-handsup"
                 MDLabel:
                     text: 'Report Abuse'
             MDCard:
-                on_press: app.change_screen('Supervisor Menu',step=2)
+                on_press: app.toast("Customer Details and Update coming soon..", 0.6)
+                width: app.widget_sizer(id="general_mdcard", parent_width=top_widget.width, parent_height=top_widget.height)
+
                 MDIcon:
                     icon: "account"
                 MDLabel:
                     text: 'Customer Details/Update'
             MDCard:
-                on_press: app.change_screen('HR page',step=2)
+                on_press: app.toast("Collection History coming soon..", .6)
+                width: app.widget_sizer(id="general_mdcard", parent_width=top_widget.width, parent_height=top_widget.height)
+
                 MDIcon:
                     icon: "hand-heart"
                 MDLabel:
                     text: 'Collection History'
-
-
-
-                #radius: [25, 0, 0, 0]
-                #md_bg_color: app.theme_cls.primary_color
-            #METER READING
-            #BILL DELIVERY
-            #CAPTURE NEW SETUP
-            #CUSTOMER CONTACTS/INFO
-            #REPORT
-
